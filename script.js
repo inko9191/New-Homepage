@@ -5,6 +5,8 @@
 (() => {
     'use strict';
 
+    const APP_VERSION = '20260418-2315';
+
     const toAbsolutePageUrl = (rawHref) => {
         if (!rawHref) return rawHref;
         if (/^(?:[a-z]+:|\/\/|#)/i.test(rawHref)) return rawHref;
@@ -21,8 +23,14 @@
         } else if (!basePath.endsWith('/')) {
             basePath += '/';
         }
-
-        return new URL(pathPart + hashPart, origin + basePath).toString();
+        const url = new URL(pathPart, origin + basePath);
+        if (/\.html?$/i.test(url.pathname)) {
+            url.searchParams.set('v', APP_VERSION);
+        }
+        if (hashPart) {
+            url.hash = hashPart.slice(1);
+        }
+        return url.toString();
     };
 
     const normalizeInternalLinks = () => {
