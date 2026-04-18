@@ -2210,7 +2210,7 @@ canvas {
         position: sticky;
         top: 0;
         display: grid;
-        grid-template-rows: 64% 36%;
+        grid-template-rows: 68% 32%;
         height: 100vh;
         height: 100dvh;
         min-height: 560px;
@@ -2220,7 +2220,7 @@ canvas {
     .assembly__scene {
         display: block;
         position: absolute;
-        inset: 64% 0 0 0;
+        inset: 68% 0 0 0;
         opacity: 0.72;
         clip-path: none;
         border-top: 1px solid rgba(0, 229, 255, 0.18);
@@ -2233,7 +2233,7 @@ canvas {
 
     .assembly__overlay {
         position: absolute;
-        inset: 0 0 36% 0;
+        inset: 0 0 32% 0;
         width: 100%;
         grid-template-columns: 1fr;
         grid-template-areas:
@@ -2291,7 +2291,7 @@ canvas {
         align-self: start;
         justify-self: stretch;
         width: 100%;
-        min-height: 248px;
+        min-height: 300px;
         margin-top: 0.2rem;
         padding: 1rem 1rem 1.05rem;
         background:
