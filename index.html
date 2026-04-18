@@ -360,15 +360,21 @@
         <div><dt>X (Twitter)</dt><dd><a href="https://x.com/JA1YGX" target="_blank" rel="noopener noreferrer">@JA1YGX</a></dd></div>
         <div><dt>Web</dt><dd>den-ken.org</dd></div>
       </dl>
-      <div class="contact__panel">
-        <div class="panel__label">// STATUS</div>
+      <div class="contact__panel" id="status-panel" data-state="loading">
+        <div class="panel__label">
+          <span>// LIVE STATUS</span>
+          <span class="panel__live" id="panel-live">QUERYING…</span>
+        </div>
         <div class="panel__bar"><div class="panel__bar-fill"></div></div>
         <div class="panel__grid">
-          <span>SYS</span><span>ONLINE</span>
-          <span>RX</span><span>LISTENING</span>
-          <span>MODE</span><span>FULL-DUPLEX</span>
-          <span>DOOR</span><span>OPEN</span>
+          <span>SYS</span>        <span id="stat-sys">…</span>
+          <span>KEY</span>        <span id="stat-key">…</span>
+          <span>DOOR</span>       <span id="stat-door">…</span>
+          <span>UPDATED</span>    <span id="stat-updated">—</span>
         </div>
+        <a class="panel__source" href="https://denken-key-checker.vercel.app/" target="_blank" rel="noopener noreferrer" id="stat-source">
+          source: denken-key-checker ↗
+        </a>
       </div>
     </div>
   </section>

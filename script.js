@@ -124,6 +124,137 @@
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
+  /* ---------- LIVE STATUS (denken-key-checker) ---------- */
+  // Best-effort: try several endpoints on the upstream app, then parse the
+  // response to pick out "open/closed" / "在/不在" signals. If every attempt
+  // is blocked (CORS, 404, timeout), the panel falls back to OFFLINE.
+  const statusPanel = document.getElementById('status-panel');
+  const elSys     = document.getElementById('stat-sys');
+  const elKey     = document.getElementById('stat-key');
+  const elDoor    = document.getElementById('stat-door');
+  const elUpdated = document.getElementById('stat-updated');
+  const elLive    = document.getElementById('panel-live');
+
+  const BASE = 'https://denken-key-checker.vercel.app';
+  const CANDIDATES = [
+    `${BASE}/api/status`,
+    `${BASE}/api/state`,
+    `${BASE}/api/key`,
+    `${BASE}/api/check`,
+    `${BASE}/api/current`,
+    `${BASE}/status.json`,
+    `${BASE}/`,   // last resort: raw HTML
+  ];
+
+  const fetchWithTimeout = (url, ms = 4500) => {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), ms);
+    return fetch(url, { signal: ctrl.signal, mode: 'cors', credentials: 'omit' })
+      .finally(() => clearTimeout(t));
+  };
+
+  const pickFromText = (text) => {
+    // Normalize
+    const t = String(text).replace(/\s+/g, ' ');
+    // Positive / negative markers (Japanese + English)
+    const openRe   = /(開室|在室|在\s*[:：]?\s*(?:中|有)|鍵.*(?:あり|有|在)|OPEN|AVAILABLE|true)/i;
+    const closedRe = /(閉室|不在|持[ちっ]?出[しぢ]?中|鍵.*(?:無|なし|持出)|CLOSED|UNAVAILABLE|false)/i;
+    const open    = openRe.test(t);
+    const closed  = closedRe.test(t);
+    if (open && !closed)  return 'OPEN';
+    if (closed && !open)  return 'CLOSED';
+    if (open && closed)   return 'OPEN'; // prefer open when ambiguous
+    return null;
+  };
+
+  const pickFromJson = (data) => {
+    const flat = JSON.stringify(data);
+    const byText = pickFromText(flat);
+    if (byText) return byText;
+    // Try typical boolean-ish fields
+    const candidates = ['open','isOpen','available','inRoom','present','door','status','state','key'];
+    for (const k of candidates) {
+      const v = data?.[k];
+      if (typeof v === 'boolean') return v ? 'OPEN' : 'CLOSED';
+      if (typeof v === 'string') {
+        const r = pickFromText(v);
+        if (r) return r;
+      }
+    }
+    return null;
+  };
+
+  const tryOne = async (url) => {
+    const res = await fetchWithTimeout(url);
+    if (!res.ok) throw new Error(`http ${res.status}`);
+    const ct = (res.headers.get('content-type') || '').toLowerCase();
+    if (ct.includes('json')) {
+      const data = await res.json();
+      return { verdict: pickFromJson(data), raw: data };
+    }
+    const text = await res.text();
+    return { verdict: pickFromText(text), raw: text.slice(0, 400) };
+  };
+
+  const fmtTime = (d) => {
+    const p = n => String(n).padStart(2,'0');
+    return `${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+  };
+
+  const setPanelState = (state) => {
+    if (statusPanel) statusPanel.setAttribute('data-state', state);
+  };
+
+  const applyResult = (verdict) => {
+    const now = new Date();
+    if (verdict === 'OPEN') {
+      setPanelState('live');
+      elLive.textContent  = 'LIVE';
+      elSys.textContent   = 'ONLINE';
+      elKey.textContent   = '在室中';
+      elDoor.textContent  = 'OPEN';
+    } else if (verdict === 'CLOSED') {
+      setPanelState('live');
+      elLive.textContent  = 'LIVE';
+      elSys.textContent   = 'ONLINE';
+      elKey.textContent   = '持出中';
+      elDoor.textContent  = 'CLOSED';
+    } else {
+      setPanelState('offline');
+      elLive.textContent  = 'UNAVAILABLE';
+      elSys.textContent   = 'ONLINE';
+      elKey.textContent   = '—';
+      elDoor.textContent  = '—';
+    }
+    elUpdated.textContent = fmtTime(now);
+  };
+
+  const applyOffline = () => {
+    setPanelState('offline');
+    elLive.textContent   = 'OFFLINE';
+    elSys.textContent    = 'UNREACHABLE';
+    elKey.textContent    = '—';
+    elDoor.textContent   = '—';
+    elUpdated.textContent= fmtTime(new Date());
+  };
+
+  const runStatusCheck = async () => {
+    if (!statusPanel) return;
+    setPanelState('loading');
+    elLive.textContent = 'QUERYING…';
+    for (const url of CANDIDATES) {
+      try {
+        const { verdict } = await tryOne(url);
+        if (verdict) { applyResult(verdict); return; }
+      } catch (_) { /* try next */ }
+    }
+    applyOffline();
+  };
+
+  // Initial query shortly after the loader finishes, then refresh every 60s.
+  setTimeout(runStatusCheck, 1500);
+  setInterval(runStatusCheck, 60_000);
+
   /* ---------- PARTICLE / CIRCUIT BACKGROUND ---------- */
   const canvas = document.getElementById('bg-canvas');
   const ctx = canvas.getContext('2d');
