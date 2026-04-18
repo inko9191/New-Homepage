@@ -12,22 +12,22 @@
   const msgEl    = document.getElementById('loader-msg');
   const page     = document.getElementById('page');
 
+  // Narrative: MCU boot → RF scan → drone deploy → software triangulates → lock.
   const bootMessages = [
-    'boot sequence…',
-    'powering up RF front-end…',
-    'spinning up drone motors…',
-    'flashing MCU firmware…',
-    'compiling user space…',
-    'calibrating antennas…',
-    'linking subsystems…',
-    'handshake OK',
+    'MCU boot…',
+    'firmware flash [STM32]…',
+    'RF scan 144 / 430 MHz…',
+    'drone telemetry link: up',
+    'TDOA solver compiled…',
+    'triangulating…',
+    'TARGET LOCKED',
   ];
 
   let progress = 0;
   let msgIndex = 0;
 
   const tickLoader = () => {
-    const step = Math.random() * 6 + 2;
+    const step = Math.random() * 7 + 4;     // faster steps
     progress = Math.min(100, progress + step);
     barFill.style.width = progress + '%';
     pctEl.textContent = Math.floor(progress);
@@ -42,22 +42,23 @@
     }
 
     if (progress < 100) {
-      setTimeout(tickLoader, 120 + Math.random() * 140);
+      setTimeout(tickLoader, 80 + Math.random() * 90); // 80-170ms
     } else {
       msgEl.textContent = bootMessages[bootMessages.length - 1];
-      setTimeout(finishLoader, 650);
+      loader.classList.add('is-locked');  // crosshair turns green
+      setTimeout(finishLoader, 360);
     }
   };
 
   const finishLoader = () => {
     loader.classList.add('is-done');
     page.classList.add('is-ready');
-    setTimeout(() => { loader.remove(); }, 1000);
+    setTimeout(() => { loader.remove(); }, 700);
   };
 
   // Kick loader after a tiny delay so intro animations can start
   window.addEventListener('load', () => {
-    setTimeout(tickLoader, 300);
+    setTimeout(tickLoader, 180);
   });
 
   /* ---------- NAV ---------- */

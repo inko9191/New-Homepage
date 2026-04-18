@@ -46,7 +46,13 @@ img,svg{max-width:100%;display:block}
   background:radial-gradient(ellipse at center,#0a1325 0%,#030510 80%);
   display:grid;place-items:center;
   overflow:hidden;
-  transition:opacity .9s ease,visibility .9s ease;
+  transition:opacity .65s ease,visibility .65s ease;
+}
+.loader.is-locked{animation:lockFlash .35s ease-out}
+@keyframes lockFlash{
+  0%{background:radial-gradient(ellipse at center,#0a1325 0%,#030510 80%)}
+  40%{background:radial-gradient(ellipse at center,#1a3a20 0%,#030510 70%)}
+  100%{background:radial-gradient(ellipse at center,#0a1325 0%,#030510 80%)}
 }
 .loader.is-done{opacity:0;visibility:hidden;pointer-events:none}
 
@@ -82,41 +88,107 @@ img,svg{max-width:100%;display:block}
   position:relative;
   width:min(72vmin,400px);aspect-ratio:1;
   display:grid;place-items:center;
-  animation:pulse 2.4s ease-in-out infinite;
+  animation:pulse 2s ease-in-out infinite;
 }
 @keyframes pulse{
   0%,100%{filter:drop-shadow(0 0 20px rgba(0,229,255,.4))}
-  50%    {filter:drop-shadow(0 0 45px rgba(180,0,255,.7))}
+  50%    {filter:drop-shadow(0 0 45px rgba(180,0,255,.65))}
 }
-.loader__circuit{width:100%;height:100%}
-.ring--outer{animation:spinSlow 14s linear infinite;transform-origin:center}
-.ring--inner{animation:spinSlow 9s linear infinite reverse;transform-origin:center}
+.loader__circuit{width:100%;height:100%;overflow:visible}
+
+/* outer hex: slow rotate */
+.ring--outer{
+  animation:spinSlow 14s linear infinite;
+  transform-origin:200px 200px;transform-box:fill-box;
+}
 @keyframes spinSlow{to{transform:rotate(360deg)}}
 
-.traces path{
-  stroke-dasharray:400;stroke-dashoffset:400;
-  animation:dash 3s ease-out forwards,pulseTrace 2s ease-in-out 3s infinite;
+/* radar concentric rings: subtle pulse */
+.radar-rings{opacity:.35}
+.radar-rings circle{animation:ringPulse 2.4s ease-in-out infinite}
+.radar-rings circle:nth-child(2){animation-delay:.3s}
+.radar-rings circle:nth-child(3){animation-delay:.6s}
+@keyframes ringPulse{
+  0%,100%{opacity:.2}
+  50%    {opacity:.55}
 }
-.traces path:nth-child(2){animation-delay:.2s,3.2s}
-.traces path:nth-child(3){animation-delay:.4s,3.4s}
-.traces path:nth-child(4){animation-delay:.6s,3.6s}
-@keyframes dash{to{stroke-dashoffset:0}}
-@keyframes pulseTrace{
-  0%,100%{opacity:.5}50%{opacity:1}
-}
-.nodes circle{animation:blink 1.3s ease-in-out infinite}
-.nodes circle:nth-child(2){animation-delay:.2s}
-.nodes circle:nth-child(3){animation-delay:.4s}
-.nodes circle:nth-child(4){animation-delay:.6s}
-@keyframes blink{50%{opacity:.2}}
 
-.spark{
-  offset-path:path("M200,40 L340,120 L340,280 L200,360 L60,280 L60,120 Z");
-  offset-rotate:0deg;
-  animation:orbit 3.2s linear infinite;
-  filter:drop-shadow(0 0 8px #00e5ff);
+/* radar sweep cone: rotate around center */
+.radar-sweep{
+  transform-origin:200px 200px;transform-box:fill-box;
+  animation:sweep 2.2s linear infinite;
 }
-@keyframes orbit{to{offset-distance:100%}}
+@keyframes sweep{to{transform:rotate(360deg)}}
+
+/* radio stations: wave ripple emanates outward */
+.station .wave{
+  transform-origin:center;transform-box:fill-box;
+  animation:waveExpand 1.6s ease-out infinite;opacity:0;
+}
+.station .wave--2{animation-delay:.45s}
+.station:nth-child(2) .wave {animation-delay:.2s}
+.station:nth-child(2) .wave--2{animation-delay:.65s}
+.station:nth-child(3) .wave {animation-delay:.4s}
+.station:nth-child(3) .wave--2{animation-delay:.85s}
+@keyframes waveExpand{
+  0%  {transform:scale(.6);opacity:.9}
+  100%{transform:scale(2.2);opacity:0}
+}
+.station polygon{animation:stationBlink 1.2s ease-in-out infinite}
+.station:nth-child(2) polygon{animation-delay:.2s}
+.station:nth-child(3) polygon{animation-delay:.4s}
+@keyframes stationBlink{50%{opacity:.4}}
+
+/* triangulation lines: draw in from station → target */
+.tri-line{
+  stroke-dasharray:200;stroke-dashoffset:200;
+  animation:triDraw 1.6s ease-out forwards,triPulse 1.2s ease-in-out 1.6s infinite;
+}
+.tri-line:nth-child(2){animation-delay:.25s,1.85s}
+.tri-line:nth-child(3){animation-delay:.5s,2.1s}
+@keyframes triDraw{to{stroke-dashoffset:0}}
+@keyframes triPulse{
+  0%,100%{opacity:.45}
+  50%    {opacity:1}
+}
+
+/* target crosshair: yellow → green on lock */
+.target-ring{
+  transform-origin:center;transform-box:fill-box;
+  animation:targetScan 1.3s ease-in-out infinite;
+}
+@keyframes targetScan{
+  0%,100%{transform:scale(1);opacity:.7}
+  50%    {transform:scale(1.12);opacity:1}
+}
+.target-dot{animation:targetDot .8s ease-in-out infinite}
+@keyframes targetDot{50%{opacity:.3}}
+
+.is-locked .target *{stroke:#7aff5c !important;fill:#7aff5c !important;animation:none !important}
+.is-locked .target{filter:drop-shadow(0 0 20px #7aff5c)}
+
+/* drone orbiting the hex perimeter */
+.drone{
+  offset-path:path("M200,40 L340,120 L340,280 L200,360 L60,280 L60,120 Z");
+  offset-distance:0%;
+  offset-rotate:0deg;
+  animation:droneOrbit 3.6s linear infinite;
+}
+@keyframes droneOrbit{to{offset-distance:100%}}
+.drone circle{animation:rotorBlur .1s linear infinite alternate;transform-origin:center;transform-box:fill-box}
+@keyframes rotorBlur{to{stroke-opacity:.3}}
+
+/* MCU chip + coords: soft blink */
+.mcu-chip{animation:chipBlink 1.6s ease-in-out infinite}
+@keyframes chipBlink{
+  0%,100%{opacity:.6}
+  50%    {opacity:1;filter:drop-shadow(0 0 6px #7aff5c)}
+}
+.coords{animation:coordsBlink 1.8s ease-in-out infinite}
+@keyframes coordsBlink{
+  0%,100%{opacity:.55}
+  50%    {opacity:1;filter:drop-shadow(0 0 6px #b400ff)}
+}
 
 .loader__text{
   position:absolute;
