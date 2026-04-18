@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-store, max-age=0" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="description" content="中央大学 電気工学研究部 ドローン班。空撮、飛行会、掲載された飛行地、白門祭での映像上映などを紹介。" />
+    <title>DENKEN // Drone Division</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500;700&amp;family=Orbitron:wght@500;700;900&amp;family=Noto+Sans+JP:wght@300;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="division.css?v=20260418-2384" />
+    <script src="division.js?v=20260418-2384" defer></script>
+</head>
+
+<body data-division="drone">
+    <canvas id="bg-canvas" class="bg-canvas"></canvas>
+    <div class="bg-grid"></div>
+    <div class="bg-vignette"></div>
+
+    <header class="nav">
+        <a href="index.html#top" class="nav__brand">
+            <span class="nav__logo" aria-hidden="true">
+                <svg viewBox="0 0 40 40">
+                    <polygon points="20,4 36,12 36,28 20,36 4,28 4,12" fill="none" stroke="currentColor"
+                        stroke-width="2" />
+                    <circle cx="20" cy="20" r="5" fill="currentColor" />
+                </svg>
+            </span>
+            <span class="nav__name">DENKEN<span class="nav__sub">// 中大 電気工学研究部</span></span>
+        </a>
+
+        <nav class="nav__menu" aria-label="primary">
+            <a href="index.html#about">ABOUT</a>
+            <div class="nav__group">
+                <button class="nav__link" type="button" aria-expanded="false" aria-haspopup="true">
+                    <span>DIVISIONS</span>
+                </button>
+                <div class="nav__panel">
+                    <a href="index.html#divisions">Overview</a>
+                    <a href="radio.html">Radio</a>
+                    <a href="drone.html" aria-current="page">Drone</a>
+                    <a href="robot.html">MCU / Robot</a>
+                    <a href="software.html">Software</a>
+                </div>
+            </div>
+            <a href="#details">DETAILS</a>
+            <a href="#records">RECORDS</a>
+            <a href="#join">JOIN</a>
+            <a href="index.html#contact">CONTACT</a>
+        </nav>
+
+        <button class="nav__toggle" aria-label="menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </header>
+
+    <main class="division-page">
+        <section class="division-hero">
+            <div class="division-hero__copy reveal">
+                <p class="division-hero__eyebrow">DRONE DIVISION / AERIAL / FPV / SHOWCASE</p>
+                <h1 class="division-hero__title">DRONE<br />DIVISION</h1>
+                <p class="division-hero__lead">
+                    ドローン班は、ドローンを使った空撮を主な活動とし、
+                    さまざまな場所へ行って飛行と撮影を行います。
+                    2024年度のページには、飛行会や白門祭での映像上映も掲載されています。
+                </p>
+                <ul class="division-hero__meta">
+                    <li>AERIAL</li>
+                    <li>FPV</li>
+                    <li>3 DRONES</li>
+                    <li>FLIGHT MEETS</li>
+                </ul>
+                <div class="division-hero__actions">
+                    <a href="#records" class="btn btn--primary">
+                        <span>CHECK 2024 LOG</span>
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M4 12h14M12 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                    </a>
+                    <a href="https://den-ken.org/drone.html" class="btn btn--ghost" target="_blank"
+                        rel="noreferrer">
+                        <span>OFFICIAL PAGE</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="division-hero__visual reveal">
+                <div class="visual-shell">
+                    <div class="fpv">
+                        <div class="fpv__view" id="fpv-view">
+                            <div class="fpv__horizon" id="fpv-horizon"></div>
+                            <div class="fpv__grid"></div>
+                            <div class="fpv__crosshair"></div>
+                            <div class="fpv__hud">
+                                <div class="fpv__hud-box">
+                                    <span>SCENE</span>
+                                    <strong id="drone-hud-scene">聖蹟桜ヶ丘</strong>
+                                </div>
+                                <div class="fpv__hud-box fpv__hud-box--right">
+                                    <span>DRONES</span>
+                                    <strong>03</strong>
+                                </div>
+                                <div class="fpv__hud-box">
+                                    <span>TYPE</span>
+                                    <strong id="drone-hud-type">PLACE</strong>
+                                </div>
+                                <div class="fpv__hud-box fpv__hud-box--right">
+                                    <span>MODE</span>
+                                    <strong id="drone-hud-mode">AERIAL</strong>
+                                </div>
+                                <div class="fpv__hud-box fpv__hud-box--wide">
+                                    <span>NOTE</span>
+                                    <strong id="drone-hud-note">公式ページに掲載されている飛行地のひとつ</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chip-buttons" aria-label="scene switcher">
+                            <button class="is-active" type="button" data-scene="seiseki">聖蹟桜ヶ丘</button>
+                            <button type="button" data-scene="ubara">鵜原</button>
+                            <button type="button" data-scene="ashinoko">芦ノ湖</button>
+                            <button type="button" data-scene="hakumon">白門祭</button>
+                        </div>
+
+                        <div class="panel">
+                            <span class="panel__kicker">LOCKED SCENE</span>
+                            <h2 class="panel__title" id="drone-title">聖蹟桜ヶ丘</h2>
+                            <p id="drone-body">ドローン班のページでは、飛行や空撮を行った場所のひとつとして聖蹟桜ヶ丘が掲載されています。</p>
+                            <ul class="bullet-list" id="drone-points">
+                                <li>主な活動は空撮</li>
+                                <li>さまざまな場所へ行って飛行と撮影を行う</li>
+                                <li>掲載地そのものが活動範囲の広さを示している</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="details" class="section">
+            <div class="section__head">
+                <span class="section__num">01</span>
+                <h2 class="section__title">DETAILS</h2>
+                <span class="section__sub">公式ページベースの活動概要</span>
+            </div>
+
+            <div class="grid-2">
+                <article class="panel reveal">
+                    <span class="panel__kicker">WHAT THEY DO</span>
+                    <h3 class="panel__title">空撮を中心に、飛行会と映像展示までつなぐ</h3>
+                    <p>
+                        ドローン班のページでは、空撮が主な活動とされ、
+                        さまざまな場所へ行って飛行と撮影を楽しむと案内されています。
+                        「電研について」では、市販ドローンによる空撮に加えてドローン製作にも触れられています。
+                    </p>
+                    <ul class="bullet-list">
+                        <li>主な活動は空撮</li>
+                        <li>各地へ出向いて飛行と撮影を行う</li>
+                        <li>白門祭（理工）で空撮映像上映も実施</li>
+                    </ul>
+                </article>
+
+                <div class="grid-4 reveal">
+                    <article class="metric">
+                        <div class="metric__kicker">AIRFRAME</div>
+                        <div class="metric__value">03</div>
+                        <div class="metric__note">公式ページ記載の保有ドローン数</div>
+                    </article>
+                    <article class="metric">
+                        <div class="metric__kicker">FOCUS</div>
+                        <div class="metric__value">AERIAL</div>
+                        <div class="metric__note">主な活動は空撮</div>
+                    </article>
+                    <article class="metric">
+                        <div class="metric__kicker">EVENT</div>
+                        <div class="metric__value">2024</div>
+                        <div class="metric__note">飛行会と上映が掲載されている年度</div>
+                    </article>
+                    <article class="metric">
+                        <div class="metric__kicker">FPV</div>
+                        <div class="metric__value">4TH+</div>
+                        <div class="metric__note">FPV には第四級以上の資格が必要</div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="records" class="section">
+            <div class="section__head">
+                <span class="section__num">02</span>
+                <h2 class="section__title">RECORDS</h2>
+                <span class="section__sub">公式掲載の 2024 年度イベント</span>
+            </div>
+
+            <div class="grid-4">
+                <article class="timeline-card reveal">
+                    <span class="timeline-card__kicker">2024.09</span>
+                    <h3 class="timeline-card__title">夏合宿ドローン飛行会</h3>
+                    <p>2024年度イベントとして、9月の夏合宿ドローン飛行会が掲載されています。</p>
+                </article>
+                <article class="timeline-card reveal">
+                    <span class="timeline-card__kicker">2024.10</span>
+                    <h3 class="timeline-card__title">ドローン飛行会</h3>
+                    <p>10月にはドローン飛行会が掲載されています。</p>
+                </article>
+                <article class="timeline-card reveal">
+                    <span class="timeline-card__kicker">2024.11</span>
+                    <h3 class="timeline-card__title">白門祭（理工）で空撮映像上映</h3>
+                    <p>学園祭では空撮映像の上映まで行っていることが公式ページからわかります。</p>
+                </article>
+                <article class="timeline-card reveal">
+                    <span class="timeline-card__kicker">2025.02-03</span>
+                    <h3 class="timeline-card__title">春合宿ドローン飛行会</h3>
+                    <p>2〜3月には春合宿ドローン飛行会が掲載されています。</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section__head">
+                <span class="section__num">03</span>
+                <h2 class="section__title">AREAS</h2>
+                <span class="section__sub">掲載されている飛行地と運用メモ</span>
+            </div>
+
+            <div class="grid-2">
+                <article class="project-card reveal">
+                    <span class="project-card__kicker">PLACES</span>
+                    <h3 class="project-card__title">聖蹟桜ヶ丘・鵜原・芦ノ湖</h3>
+                    <p>
+                        公式ページには、聖蹟桜ヶ丘、鵜原、芦ノ湖が飛行地として掲載されています。
+                        活動のスケールが「部室の中だけではない」ことが視覚的に伝わるラインナップです。
+                    </p>
+                </article>
+                <article class="project-card reveal">
+                    <span class="project-card__kicker">RADIO NOTE</span>
+                    <h3 class="project-card__title">FPV にはアマチュア無線資格が必要</h3>
+                    <p>
+                        ドローン班のページでは、FPV 飛行には第四級以上のアマチュア無線資格が必要と説明されています。
+                        ここでも無線班とのつながりが見えます。
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <section id="join" class="section">
+            <div class="cta-panel reveal">
+                <div>
+                    <span class="panel__kicker">JOIN</span>
+                    <h2 class="cta-panel__title">詳しい導線はトップページから</h2>
+                    <p class="cta-panel__copy">
+                        入部案内や連絡先はトップページ側にまとめています。
+                        ほかの班ページも同じメニューバーからそのまま回れます。
+                    </p>
+                </div>
+                <div class="division-hero__actions">
+                    <a href="index.html#join" class="btn btn--primary">
+                        <span>BACK TO JOIN</span>
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M4 12h14M12 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="grid-2 stack-top">
+                <article class="source-card reveal">
+                    <span class="source-card__kicker">SOURCE</span>
+                    <h3 class="source-card__title">参照した公式ページ</h3>
+                    <p>このページの内容は、電研公式サイトの掲載情報をもとに再構成しています。</p>
+                    <ul class="source-list">
+                        <li><a href="https://den-ken.org/about.html" target="_blank" rel="noreferrer">電研について</a></li>
+                        <li><a href="https://den-ken.org/drone.html" target="_blank" rel="noreferrer">ドローン班</a></li>
+                    </ul>
+                </article>
+                <article class="panel reveal">
+                    <span class="panel__kicker">NOTE</span>
+                    <h3 class="panel__title">メニューバーから 4 班を見比べる</h3>
+                    <p>
+                        ドローンだけでなく、無線、マイコン・ロボット、ソフトウェアもページ化しています。
+                        トップの PCB 演出と合わせて見ると、各班の役割分担がかなり立体的に見えてきます。
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="footer__brand">DENKEN</div>
+            <div>Chuo University Electrical Engineering Research Club</div>
+            <div class="footer__copy">© <span id="year"></span></div>
+        </footer>
+    </main>
+</body>
+
+</html>

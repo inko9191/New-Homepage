@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-store, max-age=0" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="description"
+        content="中央大学 電気工学研究部 — 無線・ドローン・マイコン/ロボット・ソフトウェアの4班で構成される理工系サークル。" />
+    <title>DENKEN // 中央大学 電気工学研究部</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500;700&amp;family=Orbitron:wght@500;700;900&amp;family=Noto+Sans+JP:wght@300;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css?v=20260418-2384" />
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js" defer></script>
+    <script src="script.js?v=20260418-2384" defer></script>
+    <script src="pcb3d.js?v=20260418-2384" defer></script>
+</head>
+
+<body>
+    <div id="loader" class="loader" aria-hidden="true">
+        <div class="loader__grid"></div>
+        <div class="loader__scanline"></div>
+
+        <div class="loader__core">
+            <svg class="loader__circuit" viewBox="0 0 400 400" aria-hidden="true">
+                <defs>
+                    <linearGradient id="lg1" x1="0" x2="1" y1="0" y2="1">
+                        <stop offset="0%" stop-color="#00e5ff" />
+                        <stop offset="100%" stop-color="#b400ff" />
+                    </linearGradient>
+                    <radialGradient id="sweepGrad" cx="0" cy="0.5" r="1">
+                        <stop offset="0%" stop-color="rgba(0,229,255,0.55)" />
+                        <stop offset="60%" stop-color="rgba(0,229,255,0.10)" />
+                        <stop offset="100%" stop-color="transparent" />
+                    </radialGradient>
+                    <filter id="glow">
+                        <feGaussianBlur stdDeviation="3" result="b" />
+                        <feMerge>
+                            <feMergeNode in="b" />
+                            <feMergeNode in="SourceGraphic" />
+                        </feMerge>
+                    </filter>
+                </defs>
+
+                <polygon class="ring ring--outer" points="200,40 340,120 340,280 200,360 60,280 60,120" fill="none"
+                    stroke="url(#lg1)" stroke-width="2" filter="url(#glow)" />
+
+                <g class="radar-rings">
+                    <circle cx="200" cy="200" r="50" fill="none" stroke="#00e5ff" stroke-width="0.8" />
+                    <circle cx="200" cy="200" r="90" fill="none" stroke="#00e5ff" stroke-width="0.8" />
+                    <circle cx="200" cy="200" r="130" fill="none" stroke="#00e5ff" stroke-width="0.8" />
+                </g>
+
+                <g class="radar-sweep">
+                    <path d="M200 200 L340 200 A140 140 0 0 0 270 78 Z" fill="url(#sweepGrad)" />
+                </g>
+
+                <g class="stations" filter="url(#glow)">
+                    <g class="station" transform="translate(200,40)">
+                        <polygon points="0,-10 7,7 -7,7" fill="#00e5ff" />
+                        <circle r="12" fill="none" stroke="#00e5ff" stroke-width="1" class="wave" />
+                        <circle r="20" fill="none" stroke="#00e5ff" stroke-width="1" class="wave wave--2" />
+                    </g>
+                    <g class="station" transform="translate(60,280)">
+                        <polygon points="0,-10 7,7 -7,7" fill="#00e5ff" />
+                        <circle r="12" fill="none" stroke="#00e5ff" stroke-width="1" class="wave" />
+                        <circle r="20" fill="none" stroke="#00e5ff" stroke-width="1" class="wave wave--2" />
+                    </g>
+                    <g class="station" transform="translate(340,280)">
+                        <polygon points="0,-10 7,7 -7,7" fill="#00e5ff" />
+                        <circle r="12" fill="none" stroke="#00e5ff" stroke-width="1" class="wave" />
+                        <circle r="20" fill="none" stroke="#00e5ff" stroke-width="1" class="wave wave--2" />
+                    </g>
+                </g>
+
+                <g class="triangulation" stroke="#b400ff" stroke-width="1.2" fill="none" filter="url(#glow)">
+                    <line x1="200" y1="40" x2="200" y2="200" class="tri-line" />
+                    <line x1="60" y1="280" x2="200" y2="200" class="tri-line" />
+                    <line x1="340" y1="280" x2="200" y2="200" class="tri-line" />
+                </g>
+
+                <g class="target" transform="translate(200,200)" filter="url(#glow)">
+                    <circle r="20" fill="none" stroke="#ffd400" stroke-width="1.5" class="target-ring" />
+                    <line x1="-28" y1="0" x2="-12" y2="0" stroke="#ffd400" stroke-width="1.5" />
+                    <line x1="28" y1="0" x2="12" y2="0" stroke="#ffd400" stroke-width="1.5" />
+                    <line x1="0" y1="-28" x2="0" y2="-12" stroke="#ffd400" stroke-width="1.5" />
+                    <line x1="0" y1="28" x2="0" y2="12" stroke="#ffd400" stroke-width="1.5" />
+                    <circle r="3" fill="#ffd400" class="target-dot" />
+                </g>
+
+                <g class="drone" filter="url(#glow)">
+                    <line x1="-8" y1="-8" x2="8" y2="8" stroke="#ff2d9c" stroke-width="1" />
+                    <line x1="8" y1="-8" x2="-8" y2="8" stroke="#ff2d9c" stroke-width="1" />
+                    <circle cx="-8" cy="-8" r="4" fill="none" stroke="#ff2d9c" stroke-width="1" />
+                    <circle cx="8" cy="-8" r="4" fill="none" stroke="#ff2d9c" stroke-width="1" />
+                    <circle cx="-8" cy="8" r="4" fill="none" stroke="#ff2d9c" stroke-width="1" />
+                    <circle cx="8" cy="8" r="4" fill="none" stroke="#ff2d9c" stroke-width="1" />
+                    <rect x="-3" y="-3" width="6" height="6" fill="#ff2d9c" />
+                </g>
+
+                <g class="mcu-chip" transform="translate(26,356)">
+                    <rect width="76" height="22" fill="none" stroke="#7aff5c" stroke-width="1" />
+                    <text x="38" y="15" text-anchor="middle" fill="#7aff5c" font-family="JetBrains Mono"
+                        font-size="10" letter-spacing="2">MCU</text>
+                    <line x1="8" y1="22" x2="8" y2="26" stroke="#7aff5c" stroke-width="1" />
+                    <line x1="20" y1="22" x2="20" y2="26" stroke="#7aff5c" stroke-width="1" />
+                    <line x1="32" y1="22" x2="32" y2="26" stroke="#7aff5c" stroke-width="1" />
+                    <line x1="44" y1="22" x2="44" y2="26" stroke="#7aff5c" stroke-width="1" />
+                    <line x1="56" y1="22" x2="56" y2="26" stroke="#7aff5c" stroke-width="1" />
+                    <line x1="68" y1="22" x2="68" y2="26" stroke="#7aff5c" stroke-width="1" />
+                </g>
+
+                <g class="coords" transform="translate(270,24)">
+                    <rect width="104" height="22" fill="none" stroke="#b400ff" stroke-width="1" />
+                    <text x="52" y="15" text-anchor="middle" fill="#e6f7ff" font-family="JetBrains Mono"
+                        font-size="9" letter-spacing="1">N35.7° E139.7°</text>
+                </g>
+            </svg>
+        </div>
+
+        <div class="loader__text">
+            <div class="loader__label"><span class="tick">//</span> POSITION ACQUISITION SYSTEM</div>
+            <div class="loader__title">
+                <span>D</span><span>E</span><span>N</span><span>K</span><span>E</span><span>N</span>
+                <span class="dot">.</span><span>O</span><span>R</span><span>G</span>
+            </div>
+            <div class="loader__bar">
+                <div class="loader__bar-fill"></div>
+            </div>
+            <div class="loader__status">
+                <span id="loader-pct">0</span><span>%</span>
+                <span class="loader__msg" id="loader-msg">boot sequence…</span>
+            </div>
+        </div>
+
+        <div class="loader__corner loader__corner--tl"></div>
+        <div class="loader__corner loader__corner--tr"></div>
+        <div class="loader__corner loader__corner--bl"></div>
+        <div class="loader__corner loader__corner--br"></div>
+    </div>
+
+    <div id="page" class="page" aria-hidden="false">
+        <canvas id="bg-canvas" class="bg-canvas"></canvas>
+        <div class="bg-grid"></div>
+        <div class="bg-vignette"></div>
+
+        <header class="nav">
+            <a href="#top" class="nav__brand">
+                <span class="nav__logo" aria-hidden="true">
+                    <svg viewBox="0 0 40 40">
+                        <polygon points="20,4 36,12 36,28 20,36 4,28 4,12" fill="none" stroke="currentColor"
+                            stroke-width="2" />
+                        <circle cx="20" cy="20" r="5" fill="currentColor" />
+                    </svg>
+                </span>
+                <span class="nav__name">DENKEN<span class="nav__sub">// 中大 電気工学研究部</span></span>
+            </a>
+
+            <nav class="nav__menu" aria-label="primary">
+                <a href="#about">ABOUT</a>
+                <div class="nav__group">
+                    <button class="nav__link" type="button" aria-expanded="false" aria-haspopup="true">
+                        <span>DIVISIONS</span>
+                    </button>
+                    <div class="nav__panel">
+                        <a href="#divisions">Overview</a>
+                        <a href="radio.html">Radio</a>
+                        <a href="drone.html">Drone</a>
+                        <a href="robot.html">MCU / Robot</a>
+                        <a href="software.html">Software</a>
+                    </div>
+                </div>
+                <a href="#activities">ACTIVITIES</a>
+                <a href="#assembly">ASSEMBLY</a>
+                <a href="#join">JOIN</a>
+                <a href="#contact">CONTACT</a>
+            </nav>
+
+            <button class="nav__toggle" aria-label="menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </header>
+
+        <main>
+            <section id="top" class="hero">
+                <div class="hero__scene" id="hero-scene" aria-hidden="true">
+                    <div class="hero__tooltip" id="hero-tooltip" hidden>
+                        <div class="hero__tooltip-kicker" id="hero-tooltip-kicker">MCU / ROBOT</div>
+                        <div class="hero__tooltip-title" id="hero-tooltip-title">STM32 control core</div>
+                        <p class="hero__tooltip-body" id="hero-tooltip-body">センサとモーターを束ねて動きを作る基板の中枢。</p>
+                    </div>
+                </div>
+
+                <div class="hero__copy">
+                    <p class="hero__eyebrow">JA1YGX / EST. 中央大学 後楽園キャンパス / 4 DIVISIONS ON 1 PCB</p>
+
+                    <h1 class="hero__title">
+                        <span class="line"><em>ELECTRIC</em> ENGINEERING</span>
+                        <span class="line"><em>RESEARCH</em> CLUB</span>
+                    </h1>
+
+                    <p class="hero__lead">
+                        電波を飛ばし、ドローンを飛ばし、基板を焼き、コードを書く。<br />
+                        4つの班が同じボードの上でつながる、中央大学の理工系サークル。
+                    </p>
+
+                    <div class="hero__cta">
+                        <a href="#divisions" class="btn btn--primary">
+                            <span>EXPLORE DIVISIONS</span>
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M4 12h14M12 5l7 7-7 7" fill="none" stroke="currentColor"
+                                    stroke-width="2" />
+                            </svg>
+                        </a>
+                        <a href="#join" class="btn btn--ghost"><span>// 入部希望はこちら</span></a>
+                    </div>
+
+                    <ul class="hero__legend" aria-label="board legend">
+                        <li>4 DIVISIONS</li>
+                        <li>MCU / ROBOT</li>
+                        <li>RADIO</li>
+                        <li>DRONE / SOFTWARE</li>
+                    </ul>
+
+                    <div class="hero__ticker" aria-hidden="true">
+                        <div class="ticker__track">
+                            <span>4 DIVISIONS ON 1 PCB</span><span>●</span>
+                            <span>ハードもソフトも、自分でつくる。</span><span>●</span>
+                            <span>各班の詳細ページへそのまま飛べます。</span><span>●</span>
+                            <span>学部・学科不問 / 初心者歓迎</span><span>●</span>
+                            <span>4 DIVISIONS ON 1 PCB</span><span>●</span>
+                            <span>ハードもソフトも、自分でつくる。</span><span>●</span>
+                            <span>各班の詳細ページへそのまま飛べます。</span><span>●</span>
+                            <span>学部・学科不問 / 初心者歓迎</span><span>●</span>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="#about" class="hero__scroll" aria-label="scroll down">
+                    <span></span>
+                    <em>SCROLL</em>
+                </a>
+            </section>
+
+            <section id="about" class="section section--about">
+                <div class="section__head">
+                    <span class="section__num">01</span>
+                    <h2 class="section__title">ABOUT</h2>
+                    <span class="section__sub">私たちについて</span>
+                </div>
+
+                <div class="about">
+                    <div class="about__text reveal">
+                        <p class="lead">
+                            中央大学 <strong>電気工学研究部</strong>は、後楽園キャンパスを拠点に活動する理工系サークル。
+                            電子工作・ドローン・アマチュア無線・ソフトウェア、
+                            4つの領域を自由に横断しながら、<em>「自分で作る」</em>をひたすら楽しむ場所です。
+                        </p>
+                        <p>
+                            学部・学科は問いません。ハードウェアもソフトウェアも、入ってから触れば大丈夫。
+                            先輩と部室のパーツ箱が、あなたの学びをバックアップします。
+                        </p>
+                    </div>
+
+                    <div class="about__stats">
+                        <div class="stat reveal">
+                            <div class="stat__num" data-count="4">0</div>
+                            <div class="stat__label">DIVISIONS<br />専門班</div>
+                        </div>
+                        <div class="stat reveal">
+                            <div class="stat__num" data-count="365">0</div>
+                            <div class="stat__label">DAYS/YEAR<br />いつでも活動</div>
+                        </div>
+                        <div class="stat reveal">
+                            <div class="stat__num" data-count="50" data-suffix="+">0</div>
+                            <div class="stat__label">MEMBERS<br />部員</div>
+                        </div>
+                        <div class="stat reveal">
+                            <div class="stat__num" data-count="1" data-prefix="JA1YGX">0</div>
+                            <div class="stat__label">CALL SIGN<br />コールサイン</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="divisions" class="section section--divisions">
+                <div class="section__head">
+                    <span class="section__num">02</span>
+                    <h2 class="section__title">DIVISIONS</h2>
+                    <span class="section__sub">4つの班</span>
+                </div>
+
+                <div class="divisions">
+                    <article class="div-card reveal" data-accent="#00e5ff" data-page="radio.html">
+                        <div class="div-card__index">01 / 04</div>
+                        <div class="div-card__icon">
+                            <svg viewBox="0 0 64 64" aria-hidden="true">
+                                <circle cx="32" cy="44" r="3" fill="currentColor" />
+                                <path d="M32 44 V24" stroke="currentColor" stroke-width="2" />
+                                <path d="M20 20 Q32 8 44 20" stroke="currentColor" stroke-width="2" fill="none" />
+                                <path d="M12 16 Q32 -4 52 16" stroke="currentColor" stroke-width="2" fill="none"
+                                    opacity="0.6" />
+                                <path d="M4 12 Q32 -16 60 12" stroke="currentColor" stroke-width="2" fill="none"
+                                    opacity="0.3" />
+                            </svg>
+                        </div>
+                        <h3 class="div-card__title">無線班</h3>
+                        <p class="div-card__en">RADIO DIVISION</p>
+                        <p class="div-card__desc">
+                            アマチュア無線 <strong>JA1YGX</strong> を運用。短波のDXからV/UHFのコンテスト、
+                            自作アンテナ・自作トランシーバまで、電波で世界とつながる班。
+                        </p>
+                        <ul class="div-card__tags">
+                            <li>HF / V / UHF</li>
+                            <li>DX</li>
+                            <li>Antenna</li>
+                            <li>SDR</li>
+                        </ul>
+                        <a class="div-card__jump" href="radio.html">詳しく見る ↗</a>
+                    </article>
+
+                    <article class="div-card reveal" data-accent="#ff2d9c" data-page="drone.html">
+                        <div class="div-card__index">02 / 04</div>
+                        <div class="div-card__icon">
+                            <svg viewBox="0 0 64 64" aria-hidden="true">
+                                <circle cx="16" cy="20" r="6" fill="none" stroke="currentColor" stroke-width="2" />
+                                <circle cx="48" cy="20" r="6" fill="none" stroke="currentColor" stroke-width="2" />
+                                <circle cx="16" cy="44" r="6" fill="none" stroke="currentColor" stroke-width="2" />
+                                <circle cx="48" cy="44" r="6" fill="none" stroke="currentColor" stroke-width="2" />
+                                <rect x="26" y="28" width="12" height="8" fill="currentColor" />
+                                <path d="M22 20 H42 M22 44 H42 M16 26 V38 M48 26 V38" stroke="currentColor"
+                                    stroke-width="2" />
+                            </svg>
+                        </div>
+                        <h3 class="div-card__title">ドローン班</h3>
+                        <p class="div-card__en">DRONE DIVISION</p>
+                        <p class="div-card__desc">
+                            機体の組立・チューニングから、FPV飛行、空撮、制御プログラムまで。
+                            モノを飛ばすロマンを、工学の力で突き詰める班。
+                        </p>
+                        <ul class="div-card__tags">
+                            <li>FPV</li>
+                            <li>Racing</li>
+                            <li>Aerial</li>
+                            <li>Flight Ctrl</li>
+                        </ul>
+                        <a class="div-card__jump" href="drone.html">詳しく見る ↗</a>
+                    </article>
+
+                    <article class="div-card reveal" data-accent="#ffd400" data-page="robot.html">
+                        <div class="div-card__index">03 / 04</div>
+                        <div class="div-card__icon">
+                            <svg viewBox="0 0 64 64" aria-hidden="true">
+                                <rect x="18" y="18" width="28" height="28" fill="none" stroke="currentColor"
+                                    stroke-width="2" />
+                                <rect x="24" y="24" width="16" height="16" fill="currentColor" opacity="0.3" />
+                                <g stroke="currentColor" stroke-width="2">
+                                    <path d="M22 18 V10 M28 18 V10 M34 18 V10 M40 18 V10" />
+                                    <path d="M22 54 V46 M28 54 V46 M34 54 V46 M40 54 V46" />
+                                    <path d="M10 22 H18 M10 28 H18 M10 34 H18 M10 40 H18" />
+                                    <path d="M46 22 H54 M46 28 H54 M46 34 H54 M46 40 H54" />
+                                </g>
+                            </svg>
+                        </div>
+                        <h3 class="div-card__title">マイコン・ロボット班</h3>
+                        <p class="div-card__en">MCU / ROBOT DIVISION</p>
+                        <p class="div-card__desc">
+                            Arduino / ESP32 / STM32 / Raspberry Pi。
+                            センサとモーターとはんだごてを駆使して、考えたものをそのまま動く形にする班。
+                        </p>
+                        <ul class="div-card__tags">
+                            <li>Arduino</li>
+                            <li>ESP32</li>
+                            <li>PCB</li>
+                            <li>Robotics</li>
+                        </ul>
+                        <a class="div-card__jump" href="robot.html">詳しく見る ↗</a>
+                    </article>
+
+                    <article class="div-card reveal" data-accent="#7aff5c" data-page="software.html">
+                        <div class="div-card__index">04 / 04</div>
+                        <div class="div-card__icon">
+                            <svg viewBox="0 0 64 64" aria-hidden="true">
+                                <path d="M22 18 L10 32 L22 46" fill="none" stroke="currentColor" stroke-width="2.5"
+                                    stroke-linejoin="round" />
+                                <path d="M42 18 L54 32 L42 46" fill="none" stroke="currentColor" stroke-width="2.5"
+                                    stroke-linejoin="round" />
+                                <path d="M36 14 L28 50" stroke="currentColor" stroke-width="2.5"
+                                    stroke-linecap="round" />
+                            </svg>
+                        </div>
+                        <h3 class="div-card__title">ソフトウェア班</h3>
+                        <p class="div-card__en">SOFTWARE DIVISION</p>
+                        <p class="div-card__desc">
+                            Web、ゲーム、機械学習、CTF、競プロ、ツール制作。
+                            各々が書きたいものを書き、見せ合い、磨く。コードで遊ぶ、コードで作る班。
+                        </p>
+                        <ul class="div-card__tags">
+                            <li>Web</li>
+                            <li>Game</li>
+                            <li>ML / AI</li>
+                            <li>CTF</li>
+                        </ul>
+                        <a class="div-card__jump" href="software.html">詳しく見る ↗</a>
+                    </article>
+                </div>
+            </section>
+
+            <section id="activities" class="section section--activities">
+                <div class="section__head">
+                    <span class="section__num">03</span>
+                    <h2 class="section__title">ACTIVITIES</h2>
+                    <span class="section__sub">公式サイト掲載の活動内容</span>
+                </div>
+
+                <ol class="timeline">
+                    <li class="timeline__item reveal">
+                        <div class="timeline__dot"></div>
+                        <div class="timeline__body">
+                            <div class="timeline__tag">OFFICIAL</div>
+                            <h3>年4回の全体会と年2回の合宿</h3>
+                            <p>公式サイトの「電研について」では、各班が部内全体に向けて活動報告を行う全体会を年4回、合宿を年2回実施していると案内されています。日常的な活動は班ごとに分かれて進みます。</p>
+                        </div>
+                    </li>
+                    <li class="timeline__item reveal">
+                        <div class="timeline__dot"></div>
+                        <div class="timeline__body">
+                            <div class="timeline__tag">RADIO</div>
+                            <h3>JA1YGX と無線コンテスト参加</h3>
+                            <p>無線班は「中央大学アマチュア無線クラブ」として活動し、ALL JA、ALL ASIAN DX、6m AND DOWN、フィールドデー、全市全郡などのコンテストへ向けて、1か月以上前からアンテナ設置や準備を進めます。日々の無線交信やアンテナ製作も行います。</p>
+                        </div>
+                    </li>
+                    <li class="timeline__item reveal">
+                        <div class="timeline__dot"></div>
+                        <div class="timeline__body">
+                            <div class="timeline__tag">DRONE</div>
+                            <h3>空撮と飛行会</h3>
+                            <p>ドローン班は空撮を主な活動とし、2024年度のイベントとして、9月の夏合宿ドローン飛行会、10月のドローン飛行会、11月の白門祭（理工）での空撮映像上映、2〜3月の春合宿ドローン飛行会が掲載されています。</p>
+                        </div>
+                    </li>
+                    <li class="timeline__item reveal">
+                        <div class="timeline__dot"></div>
+                        <div class="timeline__body">
+                            <div class="timeline__tag">MCU / ROBOT</div>
+                            <h3>回路設計・マイコン製作・電子工作</h3>
+                            <p>マイコン・ロボット班は、回路設計やマイコンを使った製作、プログラミングを行います。2024年度の企画一覧としては、入室チェックセンサー完成、動くごみ箱制作中、音ゲー解析制作中、その他完成品多数が掲載されています。</p>
+                        </div>
+                    </li>
+                    <li class="timeline__item reveal">
+                        <div class="timeline__dot"></div>
+                        <div class="timeline__body">
+                            <div class="timeline__tag">SOFTWARE</div>
+                            <h3>HP制作・アプリ開発・サーバー活用・AI制作</h3>
+                            <p>公式サイトでは、ソフトウェア班の活動として、電研HPの製作、アプリ開発、サーバーを活用したデータ管理、AIを活用した作品の制作が紹介されています。班紹介ページでも「このサイトの運営」やサーバー周りに触れています。</p>
+                        </div>
+                    </li>
+                </ol>
+            </section>
+
+            <section id="assembly" class="section section--assembly" aria-labelledby="assembly-title">
+                <div class="assembly__track" id="assembly-track">
+                    <div class="assembly__sticky">
+                        <div class="assembly__scene" id="assembly-scene" aria-hidden="true"></div>
+
+                        <div class="assembly__overlay">
+                            <div class="assembly__head">
+                                <span class="section__num">04</span>
+                                <h2 class="section__title" id="assembly-title">ASSEMBLY</h2>
+                                <span class="section__sub">スクロールで、1枚の基板が完成する。</span>
+                            </div>
+
+                            <p class="assembly__copy">
+                                空のPCBに抵抗、コンデンサ、IC、RFブロックが順番に落ちてきて、
+                                最後に <strong>DENKEN</strong> のボードとして起動します。
+                            </p>
+
+                            <article class="assembly__intel" id="assembly-intel" aria-live="polite">
+                                <div class="assembly__intel-top">
+                                    <span class="assembly__intel-kicker" id="assembly-intel-kicker">RADIO DIVISION</span>
+                                    <a class="assembly__intel-link" id="assembly-intel-link" href="radio.html">詳しく見る ↗</a>
+                                </div>
+                                <h3 class="assembly__intel-title" id="assembly-intel-title">JA1YGX と無線コンテスト</h3>
+                                <p class="assembly__intel-body" id="assembly-intel-body">
+                                    アマチュア無線局「中央大学アマチュア無線クラブ」を運営し、コンテスト参加、日々の無線交信、アンテナ製作を行います。
+                                </p>
+                                <ul class="assembly__intel-list" id="assembly-intel-list">
+                                    <li>コールサイン JA1YGX</li>
+                                    <li>コンテスト参加</li>
+                                    <li>日々の無線交信</li>
+                                    <li>アンテナ製作</li>
+                                </ul>
+                            </article>
+
+                            <div class="assembly__fallback">
+                                <span class="assembly__fallback-kicker">// LIGHT MODE</span>
+                                <p>3D表示が使えない環境では軽量表示に切り替えます。その場合も各班紹介と導線はこのまま確認できます。</p>
+                            </div>
+
+                            <ol class="assembly__steps" aria-hidden="true">
+                                <li data-step="0"><em>01</em> BARE BOARD</li>
+                                <li data-step="1"><em>02</em> PASSIVES</li>
+                                <li data-step="2"><em>03</em> ICs / MCU</li>
+                                <li data-step="3"><em>04</em> RF / LED</li>
+                                <li data-step="4"><em>05</em> BOOT</li>
+                            </ol>
+
+                            <div class="assembly__progress-wrap">
+                                <div class="assembly__progress">
+                                    <div class="assembly__progress-fill" id="assembly-pf"></div>
+                                </div>
+                                <div class="assembly__pct"><span id="assembly-pct">0</span>%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="join" class="section section--join">
+                <div class="section__head">
+                    <span class="section__num">05</span>
+                    <h2 class="section__title">JOIN</h2>
+                    <span class="section__sub">見学・参加について</span>
+                </div>
+
+                <div class="join">
+                    <article class="join__panel reveal">
+                        <p class="join__eyebrow">WELCOME</p>
+                        <h3 class="join__title">はんだごても、無線機も、コードも。<br />最初は触ってみるところから。</h3>
+                        <p class="join__copy">
+                            初心者歓迎。専門知識がなくても、部室の道具と先輩のサポートで少しずつ進められます。
+                            興味のある班から入って、あとから横断していくのも大歓迎です。
+                        </p>
+                        <ul class="join__chips" aria-label="entry points">
+                            <li>初心者歓迎</li>
+                            <li>学部・学科不問</li>
+                            <li>見学だけでもOK</li>
+                            <li>制作持ち込み歓迎</li>
+                        </ul>
+                        <div class="join__actions">
+                            <a href="#divisions" class="btn btn--primary">
+                                <span>SEE DIVISIONS</span>
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M4 12h14M12 5l7 7-7 7" fill="none" stroke="currentColor"
+                                        stroke-width="2" />
+                                </svg>
+                            </a>
+                            <a href="#contact" class="btn btn--ghost"><span>// CONTACT INFO</span></a>
+                        </div>
+                    </article>
+
+                    <article class="status-panel reveal" id="status-panel" data-state="loading">
+                        <div class="status-panel__top">
+                            <span class="status-panel__label">ROOM STATUS</span>
+                            <span class="status-panel__live" id="panel-live">BOOTING…</span>
+                        </div>
+
+                        <div class="panel__grid">
+                            <span>SYS</span><span id="stat-sys">…</span>
+                            <span>KEY</span><span id="stat-key">…</span>
+                            <span>DOOR</span><span id="stat-door">…</span>
+                            <span>UPDATED</span><span id="stat-updated">—</span>
+                        </div>
+
+                        <p class="status-panel__note">
+                            部室の鍵状況を、外部ステータスページから取得して表示します。
+                            取得できない場合は自動でオフライン表示に切り替わります。
+                        </p>
+
+                        <a class="panel__source" href="https://denken-key-checker.vercel.app/" target="_blank"
+                            rel="noopener noreferrer">
+                            source: denken-key-checker ↗
+                        </a>
+                    </article>
+                </div>
+
+                <div class="contact reveal" id="contact">
+                    <article class="contact__card">
+                        <p class="contact__kicker">HOW TO JOIN</p>
+                        <h3>見学からで大丈夫</h3>
+                        <p>新歓期の案内、部室開放、作品展示をきっかけに雰囲気を見てください。気になる班があればその場で質問できます。</p>
+                    </article>
+
+                    <article class="contact__card">
+                        <p class="contact__kicker">PLACE</p>
+                        <h3>後楽園キャンパス拠点</h3>
+                        <p>活動は中央大学 後楽園キャンパス周辺が中心。制作物を広げて試せるのが強みです。</p>
+                    </article>
+
+                    <article class="contact__card">
+                        <p class="contact__kicker">FIT</p>
+                        <h3>こんな人に向いています</h3>
+                        <p>手を動かすのが好きな人、電子工作や無線に憧れがある人、コードを書いて作品にしたい人。</p>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="footer__brand">DENKEN.ORG</div>
+            <div class="footer__mid">中央大学 電気工学研究部 / ELECTRIC ENGINEERING RESEARCH CLUB</div>
+            <div class="footer__copy">© <span id="year"></span> DENKEN // Built with PCB, RF and code.</div>
+        </footer>
+    </div>
+</body>
+
+</html>
