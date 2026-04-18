@@ -86,7 +86,9 @@
     };
 
     /* ---------- geometry factories ---------- */
-    const BOARD_W = 5, BOARD_H = 3.2, BOARD_T = 0.18;
+    const BOARD_W = isSmall() ? 4.8 : 5.6;
+    const BOARD_H = isSmall() ? 3.0 : 3.6;
+    const BOARD_T = 0.18;
 
     const makeBoard = () => {
         const tex = makeBoardTexture(true);
