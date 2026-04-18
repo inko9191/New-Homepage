@@ -2217,12 +2217,13 @@ canvas {
     .assembly__scene {
         display: block;
         inset: 42% 0 0 0;
-        opacity: 0.52;
+        opacity: 0.44;
         clip-path: none;
     }
 
     .assembly__scene canvas {
         transform: translateY(8%);
+        filter: saturate(0.78) brightness(0.84);
     }
 
     .assembly__overlay {
@@ -2299,9 +2300,28 @@ canvas {
         margin-top: 0.4rem;
         padding: 1rem 1rem 1.05rem;
         background:
-            linear-gradient(180deg, rgba(5, 8, 16, 0.94), rgba(5, 8, 16, 0.985)),
+            linear-gradient(180deg, rgba(7, 11, 20, 0.72), rgba(5, 8, 16, 0.78)),
             radial-gradient(circle at top right, rgba(0, 229, 255, 0.08), transparent 44%);
-        box-shadow: 0 18px 42px rgba(0, 0, 0, 0.24);
+        border: 1px solid rgba(0, 229, 255, 0.26);
+        box-shadow: 0 18px 42px rgba(0, 0, 0, 0.18);
+        backdrop-filter: blur(16px) saturate(1.08);
+        -webkit-backdrop-filter: blur(16px) saturate(1.08);
+        overflow: hidden;
+    }
+
+    .assembly__intel::before {
+        content: "";
+        position: absolute;
+        inset: -10% -6% 34% -6%;
+        background:
+            radial-gradient(circle at 50% 100%, rgba(4, 8, 14, 0.72), rgba(4, 8, 14, 0));
+        filter: blur(12px);
+        pointer-events: none;
+    }
+
+    .assembly__intel>* {
+        position: relative;
+        z-index: 1;
     }
 
     .assembly__intel-title {
