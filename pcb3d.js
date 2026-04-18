@@ -86,8 +86,8 @@
     };
 
     /* ---------- geometry factories ---------- */
-    const BOARD_W = isSmall() ? 4.8 : 5.6;
-    const BOARD_H = isSmall() ? 3.0 : 3.6;
+    const BOARD_W = isSmall() ? 5.3 : 5.6;
+    const BOARD_H = isSmall() ? 3.35 : 3.6;
     const BOARD_T = 0.18;
 
     const makeBoard = () => {
@@ -468,9 +468,9 @@
         if (!el || !track) return;
         const { scene, camera, renderer, root } = setupScene(el, { tilt: 0.32 });
         if (isSmall()) {
-            root.scale.setScalar(0.52);
-            root.position.set(0.16, -1.5, 0);
-            root.rotation.x = 0.16;
+            root.scale.setScalar(0.82);
+            root.position.set(0.22, -1.0, 0);
+            root.rotation.x = 0.2;
         }
 
         const INTEL = [
@@ -691,10 +691,10 @@
 
             // camera gentle push-in as it assembles
             if (isSmall()) {
-                camera.position.x = 0.16;
-                camera.position.z = lerp(12.2, 10.5, easeOutCubic(p));
-                camera.position.y = lerp(6.25, 5.15, easeOutCubic(p));
-                camera.lookAt(0.14, -1.28, 0);
+                camera.position.x = 0.22;
+                camera.position.z = lerp(9.4, 7.8, easeOutCubic(p));
+                camera.position.y = lerp(5.25, 4.35, easeOutCubic(p));
+                camera.lookAt(0.18, -0.94, 0);
             } else {
                 camera.position.x = 0;
                 camera.position.z = lerp(7.2, 5.6, easeOutCubic(p));
