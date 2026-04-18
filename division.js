@@ -8,6 +8,35 @@
     const qs = (selector, root = document) => root.querySelector(selector);
     const qsa = (selector, root = document) => Array.from(root.querySelectorAll(selector));
 
+    const toAbsolutePageUrl = (rawHref) => {
+        if (!rawHref) return rawHref;
+        if (/^(?:[a-z]+:|\/\/|#)/i.test(rawHref)) return rawHref;
+
+        const hashIndex = rawHref.indexOf('#');
+        const pathPart = hashIndex >= 0 ? rawHref.slice(0, hashIndex) : rawHref;
+        const hashPart = hashIndex >= 0 ? rawHref.slice(hashIndex) : '';
+        if (!pathPart) return hashPart || rawHref;
+
+        const { origin, pathname } = window.location;
+        let basePath = pathname;
+        if (basePath.endsWith('.html')) {
+            basePath = basePath.slice(0, basePath.lastIndexOf('/') + 1);
+        } else if (!basePath.endsWith('/')) {
+            basePath += '/';
+        }
+
+        return new URL(pathPart + hashPart, origin + basePath).toString();
+    };
+
+    const normalizeInternalLinks = () => {
+        qsa('a[href]').forEach((link) => {
+            const href = link.getAttribute('href');
+            if (!href) return;
+            if (/^(?:[a-z]+:|\/\/|mailto:|tel:|#)/i.test(href)) return;
+            link.href = toAbsolutePageUrl(href);
+        });
+    };
+
     const setupNav = () => {
         const nav = qs('.nav');
         const navToggle = qs('.nav__toggle');
@@ -602,6 +631,7 @@
         render('website');
     };
 
+    normalizeInternalLinks();
     setupNav();
     setupReveal();
     setupYear();

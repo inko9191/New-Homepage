@@ -5,6 +5,66 @@
 (() => {
     'use strict';
 
+    const toAbsolutePageUrl = (rawHref) => {
+        if (!rawHref) return rawHref;
+        if (/^(?:[a-z]+:|\/\/|#)/i.test(rawHref)) return rawHref;
+
+        const hashIndex = rawHref.indexOf('#');
+        const pathPart = hashIndex >= 0 ? rawHref.slice(0, hashIndex) : rawHref;
+        const hashPart = hashIndex >= 0 ? rawHref.slice(hashIndex) : '';
+        if (!pathPart) return hashPart || rawHref;
+
+        const { origin, pathname } = window.location;
+        let basePath = pathname;
+        if (basePath.endsWith('.html')) {
+            basePath = basePath.slice(0, basePath.lastIndexOf('/') + 1);
+        } else if (!basePath.endsWith('/')) {
+            basePath += '/';
+        }
+
+        return new URL(pathPart + hashPart, origin + basePath).toString();
+    };
+
+    const normalizeInternalLinks = () => {
+        document.querySelectorAll('a[href]').forEach((link) => {
+            const href = link.getAttribute('href');
+            if (!href) return;
+            if (/^(?:[a-z]+:|\/\/|mailto:|tel:|#)/i.test(href)) return;
+            link.href = toAbsolutePageUrl(href);
+        });
+    };
+
+    const setupDivisionCards = () => {
+        document.querySelectorAll('.div-card[data-page]').forEach((card) => {
+            const page = card.dataset.page;
+            const jump = card.querySelector('.div-card__jump');
+            const targetUrl = jump?.href || toAbsolutePageUrl(page);
+            if (!targetUrl) return;
+
+            card.tabIndex = 0;
+            card.setAttribute('role', 'link');
+
+            const go = () => {
+                window.location.href = targetUrl;
+            };
+
+            card.addEventListener('click', (event) => {
+                if (event.target.closest('a, button')) return;
+                go();
+            });
+
+            card.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    go();
+                }
+            });
+        });
+    };
+
+    normalizeInternalLinks();
+    setupDivisionCards();
+
     /* ---------- LOADING SCREEN ---------- */
     const loader = document.getElementById('loader');
     const barFill = loader.querySelector('.loader__bar-fill');
