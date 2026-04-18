@@ -2255,6 +2255,7 @@ canvas {
         overflow-x: hidden;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
     }
 
     .assembly__overlay::before,
@@ -2298,8 +2299,9 @@ canvas {
     }
 
     .assembly__intel {
-        flex: 1 1 auto;
-        min-height: 0;
+        /* keep the card shape stable regardless of scroll direction */
+        flex: 0 0 auto;
+        min-height: clamp(180px, 34svh, 320px);
         width: 100%;
         max-width: none;
         margin: 0;
@@ -2311,8 +2313,7 @@ canvas {
         box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
         backdrop-filter: blur(14px) saturate(1.05);
         -webkit-backdrop-filter: blur(14px) saturate(1.05);
-        overflow-y: auto;
-        overflow-x: hidden;
+        overflow: visible;
     }
 
     .assembly__intel::before {
@@ -2366,6 +2367,7 @@ canvas {
     /* stepper + progress live in a compact bar at the very bottom of the
        overlay (just above the 3D scene). inline, single row, no wrap. */
     .assembly__steps {
+        margin-top: auto;
         flex: 0 0 auto;
         display: flex;
         flex-direction: row;
