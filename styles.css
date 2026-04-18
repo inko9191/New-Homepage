@@ -2227,8 +2227,8 @@ canvas {
     .assembly__scene {
         display: block;
         position: absolute;
-        /* bottom ~40% of the panel */
-        inset: 60% 0 0 0;
+        /* bottom ~36% of the panel */
+        inset: 64% 0 0 0;
         opacity: 0.78;
         clip-path: none;
         border-top: 1px solid rgba(0, 229, 255, 0.18);
@@ -2241,9 +2241,8 @@ canvas {
 
     .assembly__overlay {
         position: absolute;
-        /* overlay occupies only the TOP half — no longer sits over the scene,
-           so rows can never spill onto the board area when viewport shrinks. */
-        inset: 0 0 40% 0;
+        /* keep more room for content on mobile, while preserving scene area */
+        inset: 0 0 36% 0;
         width: 100%;
         max-width: 100%;
         display: flex;
@@ -2252,8 +2251,10 @@ canvas {
         padding:
             calc(4.5rem + env(safe-area-inset-top, 0px))
             1rem
-            0.65rem;
-        overflow: hidden;
+            calc(0.75rem + env(safe-area-inset-bottom, 0px));
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .assembly__overlay::before,
@@ -2310,7 +2311,8 @@ canvas {
         box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
         backdrop-filter: blur(14px) saturate(1.05);
         -webkit-backdrop-filter: blur(14px) saturate(1.05);
-        overflow: hidden;
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 
     .assembly__intel::before {
@@ -2343,11 +2345,8 @@ canvas {
         margin-top: 0.38rem;
         font-size: 0.74rem;
         line-height: 1.55;
-        /* keep the body to 3 lines max so the card never overflows */
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+        display: block;
+        overflow: visible;
     }
 
     .assembly__intel-list {
@@ -2360,10 +2359,8 @@ canvas {
         padding-left: 0.85rem;
     }
 
-    /* cap the list to 3 items on mobile — the 4th rarely fits and is
-       the first to get clipped when dvh shrinks under the address bar. */
     .assembly__intel-list li:nth-child(n + 4) {
-        display: none;
+        display: list-item;
     }
 
     /* stepper + progress live in a compact bar at the very bottom of the
