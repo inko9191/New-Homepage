@@ -466,9 +466,9 @@
         if (!el || !track) return;
         const { scene, camera, renderer, root } = setupScene(el, { tilt: 0.32 });
         if (isSmall()) {
-            root.scale.setScalar(0.4);
-            root.position.set(0.18, -1.52, 0);
-            root.rotation.x = 0.12;
+            root.scale.setScalar(0.47);
+            root.position.set(0.18, -1.18, 0);
+            root.rotation.x = 0.14;
         }
 
         const INTEL = [
@@ -690,9 +690,9 @@
             // camera gentle push-in as it assembles
             if (isSmall()) {
                 camera.position.x = 0.22;
-                camera.position.z = lerp(13.6, 11.8, easeOutCubic(p));
-                camera.position.y = lerp(6.9, 5.7, easeOutCubic(p));
-                camera.lookAt(0.18, -1.18, 0);
+                camera.position.z = lerp(12.8, 11.0, easeOutCubic(p));
+                camera.position.y = lerp(6.3, 5.2, easeOutCubic(p));
+                camera.lookAt(0.18, -0.96, 0);
             } else {
                 camera.position.x = 0;
                 camera.position.z = lerp(7.2, 5.6, easeOutCubic(p));
