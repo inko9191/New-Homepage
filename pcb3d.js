@@ -465,6 +465,10 @@
         const intelList = document.getElementById('assembly-intel-list');
         if (!el || !track) return;
         const { scene, camera, renderer, root } = setupScene(el, { tilt: 0.32 });
+        if (isSmall()) {
+            root.scale.setScalar(0.72);
+            root.position.y = -0.18;
+        }
 
         const INTEL = [
             {
@@ -683,8 +687,13 @@
             logoGlow.material.opacity = bootP * 0.18;
 
             // camera gentle push-in as it assembles
-            camera.position.z = lerp(7.2, 5.6, easeOutCubic(p));
-            camera.position.y = lerp(3.9, 2.8, easeOutCubic(p));
+            if (isSmall()) {
+                camera.position.z = lerp(9.4, 7.6, easeOutCubic(p));
+                camera.position.y = lerp(4.35, 3.4, easeOutCubic(p));
+            } else {
+                camera.position.z = lerp(7.2, 5.6, easeOutCubic(p));
+                camera.position.y = lerp(3.9, 2.8, easeOutCubic(p));
+            }
             camera.lookAt(0, 0, 0);
         };
 
