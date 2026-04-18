@@ -5,7 +5,7 @@
 (() => {
     'use strict';
 
-    const APP_VERSION = '20260418-2348';
+    const APP_VERSION = '20260418-2356';
 
     const toAbsolutePageUrl = (rawHref) => {
         if (!rawHref) return rawHref;

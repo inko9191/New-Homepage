@@ -2216,8 +2216,13 @@ canvas {
 
     .assembly__scene {
         display: block;
-        opacity: 0.46;
-        clip-path: inset(38% 0 0 0);
+        inset: 42% 0 0 0;
+        opacity: 0.52;
+        clip-path: none;
+    }
+
+    .assembly__scene canvas {
+        transform: translateY(8%);
     }
 
     .assembly__overlay {
@@ -2239,15 +2244,15 @@ canvas {
             1rem
             calc(1rem + env(safe-area-inset-bottom, 0px));
         background:
-            linear-gradient(180deg, rgba(4, 8, 14, 0.9) 0%, rgba(4, 8, 14, 0.82) 20%, rgba(4, 8, 14, 0.34) 54%, rgba(4, 8, 14, 0.56) 100%);
+            linear-gradient(180deg, rgba(4, 8, 14, 0.98) 0%, rgba(4, 8, 14, 0.94) 26%, rgba(4, 8, 14, 0.52) 58%, rgba(4, 8, 14, 0.58) 100%);
     }
 
     .assembly__overlay::before {
         content: "";
         position: absolute;
-        inset: 0 0 36% 0;
+        inset: 0 0 42% 0;
         background:
-            linear-gradient(180deg, rgba(4, 8, 14, 0.98) 0%, rgba(4, 8, 14, 0.95) 35%, rgba(4, 8, 14, 0.68) 72%, transparent 100%);
+            linear-gradient(180deg, rgba(4, 8, 14, 1) 0%, rgba(4, 8, 14, 0.98) 40%, rgba(4, 8, 14, 0.74) 74%, transparent 100%);
         pointer-events: none;
     }
 
@@ -2255,13 +2260,13 @@ canvas {
         content: "";
         position: absolute;
         left: 50%;
-        top: 55%;
-        width: min(98vw, 34rem);
-        height: min(92vw, 31rem);
+        top: 52%;
+        width: min(100vw, 35rem);
+        height: min(98vw, 33rem);
         transform: translate(-50%, -50%);
         background:
-            radial-gradient(circle at 50% 46%, rgba(4, 8, 14, 0.98) 0%, rgba(4, 8, 14, 0.95) 30%, rgba(4, 8, 14, 0.84) 50%, rgba(4, 8, 14, 0.46) 66%, transparent 82%);
-        filter: blur(16px);
+            radial-gradient(circle at 50% 42%, rgba(4, 8, 14, 1) 0%, rgba(4, 8, 14, 0.98) 34%, rgba(4, 8, 14, 0.9) 54%, rgba(4, 8, 14, 0.56) 68%, transparent 84%);
+        filter: blur(18px);
         pointer-events: none;
     }
 
