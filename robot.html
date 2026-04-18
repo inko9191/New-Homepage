@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="中央大学 電気工学研究部 マイコン・ロボット班。電子工作、回路設計、2024年度企画、完成作品群を紹介。" />
+    <title>DENKEN // MCU / Robot Division</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500;700&amp;family=Orbitron:wght@500;700;900&amp;family=Noto+Sans+JP:wght@300;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="division.css" />
+    <script src="division.js" defer></script>
+</head>
+
+<body data-division="robot">
+    <canvas id="bg-canvas" class="bg-canvas"></canvas>
+    <div class="bg-grid"></div>
+    <div class="bg-vignette"></div>
+
+    <header class="nav">
+        <a href="index.html#top" class="nav__brand">
+            <span class="nav__logo" aria-hidden="true">
+                <svg viewBox="0 0 40 40">
+                    <polygon points="20,4 36,12 36,28 20,36 4,28 4,12" fill="none" stroke="currentColor"
+                        stroke-width="2" />
+                    <circle cx="20" cy="20" r="5" fill="currentColor" />
+                </svg>
+            </span>
+            <span class="nav__name">DENKEN<span class="nav__sub">// 中大 電気工学研究部</span></span>
+        </a>
+
+        <nav class="nav__menu" aria-label="primary">
+            <a href="index.html#about">ABOUT</a>
+            <div class="nav__group">
+                <button class="nav__link" type="button" aria-expanded="false" aria-haspopup="true">
+                    <span>DIVISIONS</span>
+                </button>
+                <div class="nav__panel">
+                    <a href="index.html#divisions">Overview</a>
+                    <a href="radio.html">Radio</a>
+                    <a href="drone.html">Drone</a>
+                    <a href="robot.html" aria-current="page">MCU / Robot</a>
+                    <a href="software.html">Software</a>
+                </div>
+            </div>
+            <a href="#details">DETAILS</a>
+            <a href="#records">RECORDS</a>
+            <a href="#join">JOIN</a>
+            <a href="index.html#contact">CONTACT</a>
+        </nav>
+
+        <button class="nav__toggle" aria-label="menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </header>
+
+    <main class="division-page">
+        <section class="division-hero">
+            <div class="division-hero__copy reveal">
+                <p class="division-hero__eyebrow">MCU / ROBOT DIVISION / PCB / MCU / MAKER BENCH</p>
+                <h1 class="division-hero__title">MCU /<br />ROBOT</h1>
+                <p class="division-hero__lead">
+                    マイコン・ロボット班は、主に電子工作を行い、
+                    作りたいものを少人数グループで制作します。
+                    回路設計、マイコン製作、プログラミングが活動の中心です。
+                </p>
+                <ul class="division-hero__meta">
+                    <li>ELECTRONICS</li>
+                    <li>PCB</li>
+                    <li>MCU</li>
+                    <li>PROGRAMMING</li>
+                </ul>
+                <div class="division-hero__actions">
+                    <a href="#records" class="btn btn--primary">
+                        <span>CHECK PROJECTS</span>
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M4 12h14M12 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                    </a>
+                    <a href="https://den-ken.org/robot.html" class="btn btn--ghost" target="_blank"
+                        rel="noreferrer">
+                        <span>OFFICIAL PAGE</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="division-hero__visual reveal">
+                <div class="visual-shell">
+                    <div class="bench" data-stage="sensor">
+                        <div class="bench__board">
+                            <div class="bench__trace"></div>
+                            <div class="bench__part bench__part--sensor"></div>
+                            <div class="bench__part bench__part--dustbox"></div>
+                            <div class="bench__part bench__part--cheat"></div>
+                            <div class="bench__part bench__part--printer"></div>
+                            <ul class="bench__legend">
+                                <li>SENSOR</li>
+                                <li>DUSTBOX</li>
+                                <li>ANALYSIS</li>
+                                <li>3D PRINTER</li>
+                            </ul>
+                        </div>
+
+                        <div class="chip-buttons" aria-label="bench project selector">
+                            <button class="is-active" type="button" data-stage="sensor">入室チェック</button>
+                            <button type="button" data-stage="dustbox">動くごみ箱</button>
+                            <button type="button" data-stage="cheat">音ゲー解析</button>
+                            <button type="button" data-stage="printer">3Dプリンター</button>
+                        </div>
+
+                        <div class="panel">
+                            <span class="panel__kicker">CURRENT BENCH</span>
+                            <h2 class="panel__title" id="robot-stage-title">入室チェックセンサー / 完成</h2>
+                            <p id="robot-stage-body">2024年度の企画一覧では、入室チェックセンサーが完成済みの制作物として掲載されています。</p>
+                            <ul class="bullet-list" id="robot-stage-points">
+                                <li>2024年度の完成企画として掲載</li>
+                                <li>電子工作と状態管理の相性が良いテーマ</li>
+                                <li>完成品としてページ内でも確認できる</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="details" class="section">
+            <div class="section__head">
+                <span class="section__num">01</span>
+                <h2 class="section__title">DETAILS</h2>
+                <span class="section__sub">公式ページベースの活動概要</span>
+            </div>
+
+            <div class="grid-2">
+                <article class="panel reveal">
+                    <span class="panel__kicker">WHAT THEY DO</span>
+                    <h3 class="panel__title">回路設計からマイコン制御まで、自分で組んで動かす</h3>
+                    <p>
+                        公式ページでは、電子工作が主な活動であり、
+                        少人数グループで作りたいものを制作すると紹介されています。
+                        回路設計、マイコン製作、プログラミングが中心で、今年度は3Dプリンターの購入も掲載されています。
+                    </p>
+                    <ul class="bullet-list">
+                        <li>主に電子工作を行う</li>
+                        <li>少人数グループで作りたいものを制作</li>
+                        <li>回路設計、マイコン製作、プログラミングが中心</li>
+                    </ul>
+                </article>
+
+                <div class="grid-4 reveal">
+                    <article class="metric">
+                        <div class="metric__kicker">MODE</div>
+                        <div class="metric__value">ELECTRONICS</div>
+                        <div class="metric__note">活動の核は電子工作</div>
+                    </article>
+                    <article class="metric">
+                        <div class="metric__kicker">FLOW</div>
+                        <div class="metric__value">PCB / MCU</div>
+                        <div class="metric__note">回路設計とマイコン製作が中心</div>
+                    </article>
+                    <article class="metric">
+                        <div class="metric__kicker">TEAM</div>
+                        <div class="metric__value">SMALL GROUP</div>
+                        <div class="metric__note">少人数で制作を進める</div>
+                    </article>
+                    <article class="metric">
+                        <div class="metric__kicker">NEW</div>
+                        <div class="metric__value">3D PRINTER</div>
+                        <div class="metric__note">今年度購入と公式ページに掲載</div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="records" class="section">
+            <div class="section__head">
+                <span class="section__num">02</span>
+                <h2 class="section__title">RECORDS</h2>
+                <span class="section__sub">公式掲載の 2024 年度企画</span>
+            </div>
+
+            <div class="grid-4">
+                <article class="project-card reveal">
+                    <span class="project-card__kicker">COMPLETED</span>
+                    <h3 class="project-card__title">入室チェックセンサー</h3>
+                    <p>2024年度企画として完成済みで掲載されています。</p>
+                </article>
+                <article class="project-card reveal">
+                    <span class="project-card__kicker">IN PROGRESS</span>
+                    <h3 class="project-card__title">動くごみ箱</h3>
+                    <p>制作中の企画として掲載されています。</p>
+                </article>
+                <article class="project-card reveal">
+                    <span class="project-card__kicker">IN PROGRESS</span>
+                    <h3 class="project-card__title">音ゲー解析</h3>
+                    <p>こちらも制作中の企画として掲載されています。</p>
+                </article>
+                <article class="project-card reveal">
+                    <span class="project-card__kicker">TOOLING</span>
+                    <h3 class="project-card__title">3Dプリンター導入</h3>
+                    <p>制作環境の強化として、今年度の購入が記載されています。</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section__head">
+                <span class="section__num">03</span>
+                <h2 class="section__title">WORKS</h2>
+                <span class="section__sub">公式ページに載っている完成作品</span>
+            </div>
+
+            <div class="grid-3">
+                <article class="timeline-card reveal">
+                    <span class="timeline-card__kicker">WORK</span>
+                    <h3 class="timeline-card__title">入室チェックセンサー</h3>
+                    <p>完成作品のひとつとして紹介されています。</p>
+                </article>
+                <article class="timeline-card reveal">
+                    <span class="timeline-card__kicker">WORK</span>
+                    <h3 class="timeline-card__title">ルービックキューブ全自動ソルブマシン</h3>
+                    <p>機構と制御の両方が見える完成作品です。</p>
+                </article>
+                <article class="timeline-card reveal">
+                    <span class="timeline-card__kicker">WORK</span>
+                    <h3 class="timeline-card__title">デジタル時計</h3>
+                    <p>マイコン工作の入口としても想像しやすい作品です。</p>
+                </article>
+                <article class="timeline-card reveal">
+                    <span class="timeline-card__kicker">WORK</span>
+                    <h3 class="timeline-card__title">ミニグランドピアノ</h3>
+                    <p>電子工作が表現に広がる例として載っています。</p>
+                </article>
+                <article class="timeline-card reveal">
+                    <span class="timeline-card__kicker">WORK</span>
+                    <h3 class="timeline-card__title">ロボット掃除機</h3>
+                    <p>移動体・制御・機構をまとめた作品例として掲載されています。</p>
+                </article>
+                <article class="panel reveal">
+                    <span class="panel__kicker">BEGINNER NOTE</span>
+                    <h3 class="panel__title">公式ページには「マイコンとは」の説明もある</h3>
+                    <p>
+                        班ページでは、マイコンについての基本説明も用意されています。
+                        そのため、経験者だけでなく、これから触る人に向けた入口も意識されていることがわかります。
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <section id="join" class="section">
+            <div class="cta-panel reveal">
+                <div>
+                    <span class="panel__kicker">JOIN</span>
+                    <h2 class="cta-panel__title">詳しい導線はトップページから</h2>
+                    <p class="cta-panel__copy">
+                        入部案内や連絡先はトップページ側にまとめています。
+                        ほかの班ページと並べて見ると、自分の好みに近い領域が見つけやすくなります。
+                    </p>
+                </div>
+                <div class="division-hero__actions">
+                    <a href="index.html#join" class="btn btn--primary">
+                        <span>BACK TO JOIN</span>
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M4 12h14M12 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="grid-2 stack-top">
+                <article class="source-card reveal">
+                    <span class="source-card__kicker">SOURCE</span>
+                    <h3 class="source-card__title">参照した公式ページ</h3>
+                    <p>このページの内容は、電研公式サイトの掲載情報をもとに再構成しています。</p>
+                    <ul class="source-list">
+                        <li><a href="https://den-ken.org/about.html" target="_blank" rel="noreferrer">電研について</a></li>
+                        <li><a href="https://den-ken.org/robot.html" target="_blank" rel="noreferrer">マイコン・ロボット班</a></li>
+                    </ul>
+                </article>
+                <article class="panel reveal">
+                    <span class="panel__kicker">NOTE</span>
+                    <h3 class="panel__title">上のメニューバーから他班へ</h3>
+                    <p>
+                        同じメニューバーで無線、ドローン、ソフトウェアへ移動できます。
+                        実装・制御寄りが好きなら、このページを軸に他班との接点も見やすい構成にしています。
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="footer__brand">DENKEN</div>
+            <div>Chuo University Electrical Engineering Research Club</div>
+            <div class="footer__copy">© <span id="year"></span></div>
+        </footer>
+    </main>
+</body>
+
+</html>

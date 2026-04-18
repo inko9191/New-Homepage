@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="中央大学 電気工学研究部 無線班。JA1YGX の運用、無線コンテスト参加、アンテナ製作などを紹介。" />
+    <title>DENKEN // Radio Division</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500;700&amp;family=Orbitron:wght@500;700;900&amp;family=Noto+Sans+JP:wght@300;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="division.css" />
+    <script src="division.js" defer></script>
+</head>
+
+<body data-division="radio">
+    <canvas id="bg-canvas" class="bg-canvas"></canvas>
+    <div class="bg-grid"></div>
+    <div class="bg-vignette"></div>
+
+    <header class="nav">
+        <a href="index.html#top" class="nav__brand">
+            <span class="nav__logo" aria-hidden="true">
+                <svg viewBox="0 0 40 40">
+                    <polygon points="20,4 36,12 36,28 20,36 4,28 4,12" fill="none" stroke="currentColor"
+                        stroke-width="2" />
+                    <circle cx="20" cy="20" r="5" fill="currentColor" />
+                </svg>
+            </span>
+            <span class="nav__name">DENKEN<span class="nav__sub">// 中大 電気工学研究部</span></span>
+        </a>
+
+        <nav class="nav__menu" aria-label="primary">
+            <a href="index.html#about">ABOUT</a>
+            <div class="nav__group">
+                <button class="nav__link" type="button" aria-expanded="false" aria-haspopup="true">
+                    <span>DIVISIONS</span>
+                </button>
+                <div class="nav__panel">
+                    <a href="index.html#divisions">Overview</a>
+                    <a href="radio.html" aria-current="page">Radio</a>
+                    <a href="drone.html">Drone</a>
+                    <a href="robot.html">MCU / Robot</a>
+                    <a href="software.html">Software</a>
+                </div>
+            </div>
+            <a href="#details">DETAILS</a>
+            <a href="#records">RECORDS</a>
+            <a href="#join">JOIN</a>
+            <a href="index.html#contact">CONTACT</a>
+        </nav>
+
+        <button class="nav__toggle" aria-label="menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </header>
+
+    <main class="division-page">
+        <section class="division-hero">
+            <div class="division-hero__copy reveal">
+                <p class="division-hero__eyebrow">RADIO DIVISION / JA1YGX / CONTEST STATION</p>
+                <h1 class="division-hero__title">RADIO<br />DIVISION</h1>
+                <p class="division-hero__lead">
+                    無線班は、アマチュア無線局「中央大学アマチュア無線クラブ」を運営し、
+                    コンテスト参加、日々の無線交信、アンテナ製作を行います。
+                    公式ページでも、無線コンテストが主な活動として紹介されています。
+                </p>
+                <ul class="division-hero__meta">
+                    <li>JA1YGX</li>
+                    <li>CONTEST</li>
+                    <li>ANTENNA</li>
+                    <li>DAILY QSO</li>
+                </ul>
+                <div class="division-hero__actions">
+                    <a href="#records" class="btn btn--primary">
+                        <span>CHECK SCHEDULE</span>
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M4 12h14M12 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                    </a>
+                    <a href="https://den-ken.org/radio.html" class="btn btn--ghost" target="_blank" rel="noreferrer">
+                        <span>OFFICIAL PAGE</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="division-hero__visual reveal">
+                <div class="visual-shell">
+                    <div class="radio-console">
+                        <div class="radio-console__screen">
+                            <div class="radio-console__eyebrow">SELECTED EVENT</div>
+                            <div class="radio-console__freq" id="radio-code">JA1YGX</div>
+                            <h2 class="radio-console__title" id="radio-title">中央大学アマチュア無線クラブ</h2>
+                            <p class="radio-console__body" id="radio-body">
+                                無線班はアマチュア無線局「中央大学アマチュア無線クラブ」を運営し、コンテスト参加を主軸に活動します。
+                            </p>
+                        </div>
+
+                        <div class="radio-console__meter" id="radio-meter" aria-hidden="true">
+                            <span class="is-active"></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+
+                        <input class="radio-console__dial" id="radio-dial" type="range" min="0" max="6" step="1"
+                            value="0" aria-label="radio schedule selector" />
+
+                        <div class="radio-console__labels" aria-hidden="true">
+                            <span>BASE</span>
+                            <span>APR</span>
+                            <span>JUN</span>
+                            <span>JUL</span>
+                            <span>AUG</span>
+                            <span>SEP</span>
+                            <span>OCT</span>
+                        </div>
+
+                        <div class="panel">
+                            <span class="panel__kicker">LOCKED NOTES</span>
+                            <h3 class="panel__title" id="radio-detail-title">BASE OPERATION</h3>
+                            <ul class="bullet-list" id="radio-points">
+                                <li>主な活動は無線コンテスト参加</li>
+                                <li>日々の無線交信も継続して行う</li>
+                                <li>アンテナ製作も活動の一部</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="details" class="section">
+            <div class="section__head">
+                <span class="section__num">01</span>
+                <h2 class="section__title">DETAILS</h2>
+                <span class="section__sub">公式ページベースの活動概要</span>
+            </div>
+
+            <div class="grid-2">
+                <article class="panel reveal">
+                    <span class="panel__kicker">WHAT THEY DO</span>
+                    <h3 class="panel__title">コンテストを軸に、設営から運用まで回す</h3>
+                    <p>
+                        公式ページでは、無線班の主な活動はコンテスト参加と紹介されています。
+                        アンテナ設置はコンテストの1か月以上前から始まり、当日の運用だけでなく、
+                        その前段の準備が大きな活動量を占めます。
+                    </p>
+                    <ul class="bullet-list">
+                        <li>アマチュア無線局「中央大学アマチュア無線クラブ」を運営</li>
+                        <li>コンテスト参加が主な活動</li>
+                        <li>日々の無線交信とアンテナ製作も行う</li>
+                    </ul>
+                </article>
+
+                <div class="grid-4 reveal">
+                    <article class="metric">
+                        <div class="metric__kicker">CALL</div>
+                        <div class="metric__value">JA1YGX</div>
+                        <div class="metric__note">公式ページに掲載のコールサイン</div>
+                    </article>
+                    <article class="metric">
+                        <div class="metric__kicker">FOCUS</div>
+                        <div class="metric__value">CONTEST</div>
+                        <div class="metric__note">主な活動は無線コンテスト参加</div>
+                    </article>
+                    <article class="metric">
+                        <div class="metric__kicker">PREP</div>
+                        <div class="metric__value">1+ MONTH</div>
+                        <div class="metric__note">アンテナ設置は1か月以上前から</div>
+                    </article>
+                    <article class="metric">
+                        <div class="metric__kicker">FIELD</div>
+                        <div class="metric__value">ANTENNA</div>
+                        <div class="metric__note">製作と設営も重要な活動</div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="records" class="section">
+            <div class="section__head">
+                <span class="section__num">02</span>
+                <h2 class="section__title">RECORDS</h2>
+                <span class="section__sub">公式掲載の年間スケジュール</span>
+            </div>
+
+            <div class="grid-3">
+                <article class="timeline-card reveal">
+                    <span class="timeline-card__kicker">APRIL</span>
+                    <h3 class="timeline-card__title">新歓企画・ALL JA コンテスト</h3>
+                    <p>4月のスケジュールには、新歓企画と ALL JA コンテストが掲載されています。</p>
+                </article>
+                <article class="timeline-card reveal">
+                    <span class="timeline-card__kicker">JUNE</span>
+                    <h3 class="timeline-card__title">ALL ASIAN DX contest 電信部門</h3>
+                    <p>6月には ALL ASIAN DX contest の電信部門が掲載されています。</p>
+                </article>
+                <article class="timeline-card reveal">
+                    <span class="timeline-card__kicker">JULY</span>
+                    <h3 class="timeline-card__title">6m AND DOWN コンテスト</h3>
+                    <p>7月は 6m AND DOWN コンテスト。V / UHF の空気感が見えやすい行事です。</p>
+                </article>
+                <article class="timeline-card reveal">
+                    <span class="timeline-card__kicker">AUGUST</span>
+                    <h3 class="timeline-card__title">フィールドデーコンテスト</h3>
+                    <p>8月の年間スケジュールにはフィールドデーコンテストが掲載されています。</p>
+                </article>
+                <article class="timeline-card reveal">
+                    <span class="timeline-card__kicker">SEPTEMBER</span>
+                    <h3 class="timeline-card__title">ALL ASIAN DX contest 電話部門</h3>
+                    <p>9月には ALL ASIAN DX contest の電話部門が掲載されています。</p>
+                </article>
+                <article class="timeline-card reveal">
+                    <span class="timeline-card__kicker">OCTOBER</span>
+                    <h3 class="timeline-card__title">全市全郡コンテスト</h3>
+                    <p>10月のスケジュールには全市全郡コンテストが掲載されています。</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section__head">
+                <span class="section__num">03</span>
+                <h2 class="section__title">OPERATIONS</h2>
+                <span class="section__sub">無線班らしさが出るポイント</span>
+            </div>
+
+            <div class="grid-2">
+                <article class="project-card reveal">
+                    <span class="project-card__kicker">SETUP</span>
+                    <h3 class="project-card__title">当日だけでなく、設営が活動そのもの</h3>
+                    <p>
+                        コンテストのアンテナ設置は1か月以上前から始まると案内されています。
+                        機材やアンテナを組み上げる期間まで含めて、無線班の活動です。
+                    </p>
+                </article>
+                <article class="project-card reveal">
+                    <span class="project-card__kicker">CROSSOVER</span>
+                    <h3 class="project-card__title">ドローン申請のサポートにも無線が関わる</h3>
+                    <p>
+                        公式ページでは、ドローンの申請を手伝うこともあると紹介されています。
+                        4班が別々に見えても、実際の活動ではつながりがあります。
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <section id="join" class="section">
+            <div class="cta-panel reveal">
+                <div>
+                    <span class="panel__kicker">JOIN</span>
+                    <h2 class="cta-panel__title">詳しい導線はトップページから</h2>
+                    <p class="cta-panel__copy">
+                        入部案内と連絡先はトップページ側にまとめています。
+                        気になったらそのまま戻って、他の班ページも見比べてください。
+                    </p>
+                </div>
+                <div class="division-hero__actions">
+                    <a href="index.html#join" class="btn btn--primary">
+                        <span>BACK TO JOIN</span>
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M4 12h14M12 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="grid-2 stack-top">
+                <article class="source-card reveal">
+                    <span class="source-card__kicker">SOURCE</span>
+                    <h3 class="source-card__title">参照した公式ページ</h3>
+                    <p>このページの内容は、電研公式サイトの掲載情報をもとに再構成しています。</p>
+                    <ul class="source-list">
+                        <li><a href="https://den-ken.org/about.html" target="_blank" rel="noreferrer">電研について</a></li>
+                        <li><a href="https://den-ken.org/radio.html" target="_blank" rel="noreferrer">無線班</a></li>
+                    </ul>
+                </article>
+                <article class="panel reveal">
+                    <span class="panel__kicker">NOTE</span>
+                    <h3 class="panel__title">上のメニューバーから他班へ</h3>
+                    <p>
+                        ドローン班、マイコン・ロボット班、ソフトウェア班も同じメニューバーから移動できます。
+                        4班を並べて見ると、トップページの PCB 組み立て演出ともつながって見えてきます。
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="footer__brand">DENKEN</div>
+            <div>Chuo University Electrical Engineering Research Club</div>
+            <div class="footer__copy">© <span id="year"></span></div>
+        </footer>
+    </main>
+</body>
+
+</html>
