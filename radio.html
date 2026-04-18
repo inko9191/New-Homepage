@@ -14,8 +14,8 @@
     <link
         href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500;700&amp;family=Orbitron:wght@500;700;900&amp;family=Noto+Sans+JP:wght@300;500;700&amp;display=swap"
         rel="stylesheet" />
-    <link rel="stylesheet" href="division.css?v=20260418-2384" />
-    <script src="division.js?v=20260418-2384" defer></script>
+    <link rel="stylesheet" href="division.css?v=20260418-2385" />
+    <script src="division.js?v=20260418-2385" defer></script>
 </head>
 
 <body data-division="radio">
@@ -251,6 +251,38 @@
                         4班が別々に見えても、実際の活動ではつながりがあります。
                     </p>
                 </article>
+            </div>
+        </section>
+
+        <section id="cw" class="section">
+            <div class="section__head">
+                <span class="section__num">04</span>
+                <h2 class="section__title">CW KEY LAB</h2>
+                <span class="section__sub">ブラウザでモールスを打つ</span>
+            </div>
+
+            <div class="cw reveal">
+                <div class="cw__screen">
+                    <div class="cw__row">
+                        <span class="cw__label">INPUT</span>
+                        <div class="cw__morse" id="cw-morse">—</div>
+                    </div>
+                    <div class="cw__row">
+                        <span class="cw__label">DECODE</span>
+                        <div class="cw__text" id="cw-text">—</div>
+                    </div>
+                </div>
+                <button class="cw__key" id="cw-key" type="button" aria-label="cw key">
+                    <span class="cw__key-ring"></span>
+                    <span class="cw__key-label">PRESS / HOLD</span>
+                </button>
+                <div class="chip-buttons cw__chips" aria-label="cw presets">
+                    <button type="button" data-cw-preset="CQ">CQ DE JA1YGX</button>
+                    <button type="button" data-cw-preset="HELLO">HELLO</button>
+                    <button type="button" data-cw-preset="599">599</button>
+                    <button type="button" data-cw-clear>CLEAR</button>
+                </div>
+                <p class="cw__hint">短くタップで「・」、長押しで「—」。PC はスペースキーでも打鍵できます。</p>
             </div>
         </section>
 

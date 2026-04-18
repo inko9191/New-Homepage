@@ -14,8 +14,8 @@
     <link
         href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500;700&amp;family=Orbitron:wght@500;700;900&amp;family=Noto+Sans+JP:wght@300;500;700&amp;display=swap"
         rel="stylesheet" />
-    <link rel="stylesheet" href="division.css?v=20260418-2384" />
-    <script src="division.js?v=20260418-2384" defer></script>
+    <link rel="stylesheet" href="division.css?v=20260418-2385" />
+    <script src="division.js?v=20260418-2385" defer></script>
 </head>
 
 <body data-division="drone">
@@ -245,6 +245,33 @@
                         ドローン班のページでは、FPV 飛行には第四級以上のアマチュア無線資格が必要と説明されています。
                         ここでも無線班とのつながりが見えます。
                     </p>
+                </article>
+            </div>
+        </section>
+
+        <section id="fpv-mode" class="section">
+            <div class="section__head">
+                <span class="section__num">04</span>
+                <h2 class="section__title">PAGE = FPV</h2>
+                <span class="section__sub">ページ全体を FPV ゴーグル化する</span>
+            </div>
+
+            <div class="fpv-launcher">
+                <article class="panel reveal">
+                    <span class="panel__kicker">MODE SWITCH</span>
+                    <h3 class="panel__title">全画面に HUD を重ねる</h3>
+                    <p>ボタンを押すとページ全体に FPV ゴーグル風の HUD が重なります。スマホは端末を傾けると水平線が追従します。</p>
+                    <button class="btn btn--primary" id="fpv-toggle" type="button">
+                        <span>ENTER FPV</span>
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M4 12h14M12 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                    </button>
+                </article>
+                <article class="panel reveal">
+                    <span class="panel__kicker">NOTE</span>
+                    <h3 class="panel__title">傾きセンサーとポインター</h3>
+                    <p>iOS はセンサー許可のダイアログが出る場合があります。許可しない場合はポインターやタッチで水平線が擬似的に動きます。ESC キーか EXIT ボタンで解除できます。</p>
                 </article>
             </div>
         </section>

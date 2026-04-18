@@ -14,8 +14,8 @@
     <link
         href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500;700&amp;family=Orbitron:wght@500;700;900&amp;family=Noto+Sans+JP:wght@300;500;700&amp;display=swap"
         rel="stylesheet" />
-    <link rel="stylesheet" href="division.css?v=20260418-2384" />
-    <script src="division.js?v=20260418-2384" defer></script>
+    <link rel="stylesheet" href="division.css?v=20260418-2385" />
+    <script src="division.js?v=20260418-2385" defer></script>
 </head>
 
 <body data-division="software">
@@ -249,6 +249,40 @@
                     <h3 class="timeline-card__title">他班の活動を載せる基盤にもなる</h3>
                     <p>トップページや各班ページは、4班の活動をまとめて見せる土台にもなります。</p>
                 </article>
+            </div>
+        </section>
+
+        <section id="terminal" class="section">
+            <div class="section__head">
+                <span class="section__num">04</span>
+                <h2 class="section__title">WEB TERMINAL</h2>
+                <span class="section__sub">ブラウザ内シェルで電研を探索</span>
+            </div>
+
+            <div class="term reveal">
+                <div class="term__bar">
+                    <span class="term__dot"></span>
+                    <span class="term__dot"></span>
+                    <span class="term__dot"></span>
+                    <span class="term__title">denken@web — zsh</span>
+                </div>
+                <div class="term__body" id="term-body" role="log" aria-live="polite"></div>
+                <form class="term__form" id="term-form" autocomplete="off">
+                    <span class="term__prompt">denken@web:~$</span>
+                    <input class="term__input" id="term-input" type="text" spellcheck="false"
+                        autocapitalize="off" autocorrect="off" autocomplete="off" aria-label="terminal input" />
+                </form>
+                <div class="chip-buttons term__chips" aria-label="quick commands">
+                    <button type="button" data-cmd="help">help</button>
+                    <button type="button" data-cmd="whoami">whoami</button>
+                    <button type="button" data-cmd="ls">ls</button>
+                    <button type="button" data-cmd="cat about.md">cat about.md</button>
+                    <button type="button" data-cmd="cat divisions.md">cat divisions.md</button>
+                    <button type="button" data-cmd="ja1ygx">ja1ygx</button>
+                    <button type="button" data-cmd="matrix">matrix</button>
+                    <button type="button" data-cmd="roll">roll</button>
+                    <button type="button" data-cmd="clear">clear</button>
+                </div>
             </div>
         </section>
 

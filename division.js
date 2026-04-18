@@ -7,7 +7,7 @@
 
     const qs = (selector, root = document) => root.querySelector(selector);
     const qsa = (selector, root = document) => Array.from(root.querySelectorAll(selector));
-    const APP_VERSION = '20260418-2384';
+    const APP_VERSION = '20260418-2385';
 
     const toAbsolutePageUrl = (rawHref) => {
         if (!rawHref) return rawHref;
@@ -638,6 +638,525 @@
         render('website');
     };
 
+    /* ===== GIMMICKS ===== */
+
+    // --- Radio CW Key Lab ---
+    const MORSE = {
+        '.-': 'A', '-...': 'B', '-.-.': 'C', '-..': 'D', '.': 'E',
+        '..-.': 'F', '--.': 'G', '....': 'H', '..': 'I', '.---': 'J',
+        '-.-': 'K', '.-..': 'L', '--': 'M', '-.': 'N', '---': 'O',
+        '.--.': 'P', '--.-': 'Q', '.-.': 'R', '...': 'S', '-': 'T',
+        '..-': 'U', '...-': 'V', '.--': 'W', '-..-': 'X', '-.--': 'Y',
+        '--..': 'Z',
+        '-----': '0', '.----': '1', '..---': '2', '...--': '3', '....-': '4',
+        '.....': '5', '-....': '6', '--...': '7', '---..': '8', '----.': '9',
+        '.-.-.-': '.', '--..--': ',', '..--..': '?', '-.-.--': '!',
+        '-....-': '-', '.----.': "'", '-..-.': '/',
+    };
+
+    const textToMorse = (str) => str.toUpperCase().split('').map((ch) => {
+        if (ch === ' ') return '/';
+        const entry = Object.entries(MORSE).find(([, v]) => v === ch);
+        return entry ? entry[0] : '';
+    }).filter(Boolean).join(' ');
+
+    const setupCwKey = () => {
+        const key = qs('#cw-key');
+        if (!key) return;
+        const morseEl = qs('#cw-morse');
+        const textEl = qs('#cw-text');
+        const presets = qsa('[data-cw-preset]');
+        const clearBtn = qs('[data-cw-clear]');
+
+        const UNIT = 110;
+        const DASH_THRESHOLD = UNIT * 2;
+        const LETTER_GAP = UNIT * 3;
+        const WORD_GAP = UNIT * 6;
+
+        let pressedAt = 0;
+        let pending = '';
+        let flushTimer = null;
+        let audioCtx = null;
+        let oscNode = null;
+
+        const ensureAudio = () => {
+            if (audioCtx) return audioCtx;
+            try {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            } catch (_) { audioCtx = null; }
+            return audioCtx;
+        };
+
+        const tone = (on) => {
+            const ctx = ensureAudio();
+            if (!ctx) return;
+            if (on) {
+                if (oscNode) return;
+                oscNode = ctx.createOscillator();
+                const gain = ctx.createGain();
+                oscNode.type = 'sine';
+                oscNode.frequency.value = 620;
+                gain.gain.value = 0.0001;
+                gain.gain.exponentialRampToValueAtTime(0.18, ctx.currentTime + 0.01);
+                oscNode.connect(gain).connect(ctx.destination);
+                oscNode.start();
+                oscNode._gain = gain;
+            } else if (oscNode) {
+                const now = ctx.currentTime;
+                oscNode._gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.03);
+                const n = oscNode;
+                setTimeout(() => { try { n.stop(); } catch (_) {} }, 60);
+                oscNode = null;
+            }
+        };
+
+        const render = () => {
+            morseEl.textContent = pending.length ? pending : '—';
+            const tokens = pending.trim().split(/\s+/);
+            const decoded = tokens.map((tok) => {
+                if (tok === '/') return ' ';
+                return MORSE[tok] || (tok ? '?' : '');
+            }).join('');
+            textEl.textContent = decoded || '—';
+        };
+
+        const scheduleFlush = (delay) => {
+            if (flushTimer) clearTimeout(flushTimer);
+            flushTimer = setTimeout(() => {
+                if (!pending.endsWith(' ') && pending.length) pending += ' ';
+                render();
+                flushTimer = setTimeout(() => {
+                    if (!pending.endsWith('/ ') && pending.trim().length) pending += '/ ';
+                    render();
+                }, WORD_GAP - delay);
+            }, delay);
+        };
+
+        const pressDown = (event) => {
+            if (event) event.preventDefault();
+            ensureAudio();
+            if (pressedAt) return;
+            pressedAt = performance.now();
+            key.classList.add('is-pressed');
+            if (flushTimer) { clearTimeout(flushTimer); flushTimer = null; }
+            tone(true);
+        };
+
+        const pressUp = (event) => {
+            if (event) event.preventDefault();
+            if (!pressedAt) return;
+            const dur = performance.now() - pressedAt;
+            pressedAt = 0;
+            key.classList.remove('is-pressed');
+            tone(false);
+            pending += dur >= DASH_THRESHOLD ? '-' : '.';
+            render();
+            scheduleFlush(LETTER_GAP);
+        };
+
+        key.addEventListener('pointerdown', pressDown);
+        key.addEventListener('pointerup', pressUp);
+        key.addEventListener('pointerleave', (e) => { if (pressedAt) pressUp(e); });
+        key.addEventListener('pointercancel', pressUp);
+
+        window.addEventListener('keydown', (event) => {
+            if (event.code !== 'Space' && event.key !== ' ') return;
+            if (document.activeElement && document.activeElement.matches('input, textarea')) return;
+            if (event.repeat) return;
+            pressDown(event);
+        });
+        window.addEventListener('keyup', (event) => {
+            if (event.code !== 'Space' && event.key !== ' ') return;
+            if (!pressedAt) return;
+            pressUp(event);
+        });
+
+        presets.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const map = {
+                    CQ: 'CQ DE JA1YGX',
+                    HELLO: 'HELLO WORLD',
+                    '599': '599',
+                };
+                const key = btn.dataset.cwPreset;
+                const text = map[key] || key;
+                pending = textToMorse(text) + ' ';
+                render();
+            });
+        });
+
+        if (clearBtn) {
+            clearBtn.addEventListener('click', () => {
+                pending = '';
+                render();
+            });
+        }
+
+        render();
+    };
+
+    // --- Drone FPV Mode overlay ---
+    const setupFpvMode = () => {
+        const toggle = qs('#fpv-toggle');
+        if (!toggle) return;
+
+        const overlay = document.createElement('div');
+        overlay.className = 'fpv-overlay';
+        overlay.setAttribute('aria-hidden', 'true');
+        overlay.innerHTML = `
+            <div class="fpv-overlay__frame"></div>
+            <div class="fpv-overlay__corner tl"></div>
+            <div class="fpv-overlay__corner tr"></div>
+            <div class="fpv-overlay__corner bl"></div>
+            <div class="fpv-overlay__corner br"></div>
+            <div class="fpv-overlay__status">● REC FPV LINK</div>
+            <button class="fpv-overlay__close" type="button">EXIT</button>
+            <div class="fpv-overlay__horizon"><span id="fpv-horizon-bar"></span></div>
+            <div class="fpv-overlay__crosshair">
+                <span class="fpv-overlay__dot"></span>
+            </div>
+            <div class="fpv-overlay__hud">
+                <div class="fpv-overlay__chip"><span>CALL</span><strong>JA1YGX</strong></div>
+                <div class="fpv-overlay__chip align-center"><span>ALT</span><strong id="fpv-alt">0m</strong></div>
+                <div class="fpv-overlay__chip align-right"><span>HDG</span><strong id="fpv-hdg">000°</strong></div>
+                <div class="fpv-overlay__chip"><span>SCENE</span><strong>聖蹟桜ヶ丘</strong></div>
+                <div class="fpv-overlay__chip align-center"><span>MODE</span><strong>AERIAL</strong></div>
+                <div class="fpv-overlay__chip align-right"><span>BATT</span><strong id="fpv-batt">92%</strong></div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        const closeBtn = overlay.querySelector('.fpv-overlay__close');
+        const bar = overlay.querySelector('#fpv-horizon-bar');
+        const altEl = overlay.querySelector('#fpv-alt');
+        const hdgEl = overlay.querySelector('#fpv-hdg');
+        const battEl = overlay.querySelector('#fpv-batt');
+
+        let active = false;
+        let tilt = { x: 0, y: 0 };
+        let altBase = 42;
+        let hdgBase = 12;
+        let battery = 92;
+        let ticker = null;
+        let pointerHandler = null;
+        let orientationHandler = null;
+
+        const applyTilt = () => {
+            const pitch = Math.max(-12, Math.min(12, tilt.y));
+            const roll = Math.max(-14, Math.min(14, tilt.x));
+            if (bar) bar.style.transform = `translate(-50%, calc(-50% + ${pitch * 2}px)) rotate(${roll}deg)`;
+        };
+
+        const enable = async () => {
+            if (active) return;
+            active = true;
+            document.body.classList.add('fpv-on');
+            toggle.querySelector('span').textContent = 'EXIT FPV';
+
+            pointerHandler = (event) => {
+                const x = (event.clientX / window.innerWidth) - 0.5;
+                const y = (event.clientY / window.innerHeight) - 0.5;
+                tilt.x = x * 18;
+                tilt.y = y * 10;
+                applyTilt();
+            };
+            window.addEventListener('pointermove', pointerHandler);
+
+            const bindOrientation = () => {
+                orientationHandler = (event) => {
+                    tilt.x = event.gamma || 0;
+                    tilt.y = (event.beta || 0) - 30;
+                    applyTilt();
+                };
+                window.addEventListener('deviceorientation', orientationHandler);
+            };
+
+            if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                try {
+                    const res = await DeviceOrientationEvent.requestPermission();
+                    if (res === 'granted') bindOrientation();
+                } catch (_) { /* fallback to pointer */ }
+            } else if ('DeviceOrientationEvent' in window) {
+                bindOrientation();
+            }
+
+            ticker = setInterval(() => {
+                altBase = Math.max(18, Math.min(120, altBase + (Math.random() - 0.5) * 4));
+                hdgBase = (hdgBase + (Math.random() - 0.3) * 6 + 360) % 360;
+                battery = Math.max(42, battery - 0.1);
+                altEl.textContent = `${Math.round(altBase)}m`;
+                hdgEl.textContent = `${String(Math.round(hdgBase)).padStart(3, '0')}°`;
+                battEl.textContent = `${Math.round(battery)}%`;
+            }, 500);
+        };
+
+        const disable = () => {
+            if (!active) return;
+            active = false;
+            document.body.classList.remove('fpv-on');
+            toggle.querySelector('span').textContent = 'ENTER FPV';
+            if (pointerHandler) window.removeEventListener('pointermove', pointerHandler);
+            if (orientationHandler) window.removeEventListener('deviceorientation', orientationHandler);
+            if (ticker) clearInterval(ticker);
+            pointerHandler = null;
+            orientationHandler = null;
+            ticker = null;
+        };
+
+        toggle.addEventListener('click', () => (active ? disable() : enable()));
+        closeBtn.addEventListener('click', disable);
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') disable();
+        });
+    };
+
+    // --- Robot Lチカ LAB ---
+    const setupLab = () => {
+        const led = qs('#lab-led');
+        if (!led) return;
+        const runBtn = qs('#lab-run');
+        const stopBtn = qs('#lab-stop');
+        const titleEl = qs('#lab-title');
+        const descEl = qs('#lab-desc');
+        const codeEl = qs('#lab-code');
+        const patternBtns = qsa('[data-pattern]');
+
+        const color = (cls, body) => `<span class="${cls}">${body}</span>`;
+        const kw = (s) => color('kw', s);
+        const fn = (s) => color('fn', s);
+        const num = (s) => color('num', s);
+        const com = (s) => color('com', s);
+
+        const patterns = {
+            blink: {
+                title: 'BLINK',
+                desc: '500ms ごとに LED を ON / OFF する最小 Lチカ。',
+                code: `${kw('const')} LED = ${num('13')};\n\n${kw('void')} ${fn('setup')}() {\n  ${fn('pinMode')}(LED, OUTPUT);\n}\n\n${kw('void')} ${fn('loop')}() {\n  ${fn('digitalWrite')}(LED, HIGH);\n  ${fn('delay')}(${num('500')});\n  ${fn('digitalWrite')}(LED, LOW);\n  ${fn('delay')}(${num('500')});\n}`,
+                sequence: [[1, 500], [0, 500]],
+            },
+            fade: {
+                title: 'FADE',
+                desc: 'PWM で明るさを滑らかに往復。呼吸するような Lチカ。',
+                code: `${kw('const')} LED = ${num('9')};\n\n${kw('void')} ${fn('setup')}() {\n  ${fn('pinMode')}(LED, OUTPUT);\n}\n\n${kw('void')} ${fn('loop')}() {\n  ${kw('for')} (${kw('int')} v = ${num('0')}; v <= ${num('255')}; v++) {\n    ${fn('analogWrite')}(LED, v);\n    ${fn('delay')}(${num('6')});\n  }\n  ${kw('for')} (${kw('int')} v = ${num('255')}; v >= ${num('0')}; v--) {\n    ${fn('analogWrite')}(LED, v);\n    ${fn('delay')}(${num('6')});\n  }\n}`,
+                sequence: 'fade',
+            },
+            sos: {
+                title: 'SOS',
+                desc: 'モールスで S・O・S。無線班のロマンをマイコンで再現。',
+                code: `${com('// ... --- ... (S O S)')}\n${kw('const')} LED = ${num('13')};\n${kw('const')} DOT = ${num('160')};\n\n${kw('void')} ${fn('setup')}() { ${fn('pinMode')}(LED, OUTPUT); }\n\n${kw('void')} ${fn('flash')}(${kw('int')} ms) {\n  ${fn('digitalWrite')}(LED, HIGH); ${fn('delay')}(ms);\n  ${fn('digitalWrite')}(LED, LOW);  ${fn('delay')}(DOT);\n}\n\n${kw('void')} ${fn('loop')}() {\n  ${kw('for')} (${kw('int')} i = ${num('0')}; i < ${num('3')}; i++) ${fn('flash')}(DOT);\n  ${fn('delay')}(DOT);\n  ${kw('for')} (${kw('int')} i = ${num('0')}; i < ${num('3')}; i++) ${fn('flash')}(DOT * ${num('3')});\n  ${fn('delay')}(DOT);\n  ${kw('for')} (${kw('int')} i = ${num('0')}; i < ${num('3')}; i++) ${fn('flash')}(DOT);\n  ${fn('delay')}(DOT * ${num('6')});\n}`,
+                sequence: [
+                    [1, 160], [0, 160], [1, 160], [0, 160], [1, 160], [0, 480],
+                    [1, 480], [0, 160], [1, 480], [0, 160], [1, 480], [0, 480],
+                    [1, 160], [0, 160], [1, 160], [0, 160], [1, 160], [0, 900],
+                ],
+            },
+        };
+
+        let running = false;
+        let currentKey = 'blink';
+        let rafId = 0;
+        let timeoutId = 0;
+
+        const stop = () => {
+            running = false;
+            if (rafId) cancelAnimationFrame(rafId);
+            if (timeoutId) clearTimeout(timeoutId);
+            rafId = 0;
+            timeoutId = 0;
+            led.classList.remove('is-on');
+            led.style.filter = '';
+        };
+
+        const runSequence = (seq) => {
+            let i = 0;
+            const step = () => {
+                if (!running) return;
+                const [state, dur] = seq[i % seq.length];
+                led.classList.toggle('is-on', state === 1);
+                i += 1;
+                timeoutId = setTimeout(step, dur);
+            };
+            step();
+        };
+
+        const runFade = () => {
+            const startTime = performance.now();
+            const cycle = 2400;
+            led.classList.add('is-on');
+            const tick = (now) => {
+                if (!running) return;
+                const p = ((now - startTime) % cycle) / cycle;
+                const v = 0.5 - 0.5 * Math.cos(p * Math.PI * 2);
+                led.style.filter = `brightness(${0.25 + v * 1.1}) saturate(${0.6 + v * 0.7})`;
+                rafId = requestAnimationFrame(tick);
+            };
+            rafId = requestAnimationFrame(tick);
+        };
+
+        const run = () => {
+            stop();
+            running = true;
+            const pattern = patterns[currentKey];
+            if (pattern.sequence === 'fade') runFade();
+            else runSequence(pattern.sequence);
+        };
+
+        const render = (key) => {
+            const pattern = patterns[key] || patterns.blink;
+            currentKey = key;
+            titleEl.textContent = pattern.title;
+            descEl.textContent = pattern.desc;
+            codeEl.innerHTML = `<code>${pattern.code}</code>`;
+            patternBtns.forEach((btn) => {
+                btn.classList.toggle('is-active', btn.dataset.pattern === key);
+            });
+            if (running) run();
+        };
+
+        patternBtns.forEach((btn) => {
+            btn.addEventListener('click', () => render(btn.dataset.pattern));
+        });
+
+        runBtn.addEventListener('click', run);
+        stopBtn.addEventListener('click', stop);
+
+        render('blink');
+    };
+
+    // --- Software WEB TERMINAL ---
+    const setupTerminal = () => {
+        const form = qs('#term-form');
+        if (!form) return;
+        const body = qs('#term-body');
+        const input = qs('#term-input');
+        const chips = qsa('[data-cmd]');
+
+        const history = [];
+        let hPointer = -1;
+
+        const print = (html, cls) => {
+            const line = document.createElement('div');
+            line.className = `term__line${cls ? ' ' + cls : ''}`;
+            line.innerHTML = html;
+            body.appendChild(line);
+            body.scrollTop = body.scrollHeight;
+        };
+
+        const echo = (cmd) => {
+            const line = document.createElement('div');
+            line.className = 'term__line cmd';
+            line.textContent = cmd;
+            body.appendChild(line);
+            body.scrollTop = body.scrollHeight;
+        };
+
+        const commands = {
+            help: () => {
+                print('Available commands:');
+                print('  <span class="hl">help</span>     this screen');
+                print('  <span class="hl">whoami</span>   current user');
+                print('  <span class="hl">ls</span>       list files');
+                print('  <span class="hl">cat</span>      cat about.md / cat divisions.md');
+                print('  <span class="hl">ja1ygx</span>   show call sign card');
+                print('  <span class="hl">status</span>   club status summary');
+                print('  <span class="hl">roll</span>     roll a dice');
+                print('  <span class="hl">matrix</span>   hack the mainframe');
+                print('  <span class="hl">clear</span>    clear screen');
+            },
+            whoami: () => print('denken (Chuo University Electrical Engineering Research Club)'),
+            ls: () => {
+                print('<span class="hl">about.md</span>     <span class="hl">divisions.md</span>     <span class="hl">ja1ygx.txt</span>     <span class="hl">README</span>');
+            },
+            status: () => {
+                print('DIVISIONS: <span class="hl">4</span>  (radio / drone / mcu / software)');
+                print('CALL SIGN: <span class="hl">JA1YGX</span>');
+                print('SITE     : <span class="hl">den-ken.org</span>');
+                print('BUILD    : <span class="dim">live</span>');
+            },
+            ja1ygx: () => {
+                print('<span class="hl">┌──────────────────────────────────────┐</span>');
+                print('<span class="hl">│  CALL : JA1YGX                       │</span>');
+                print('<span class="hl">│  CLUB : 中央大学 電気工学研究部      │</span>');
+                print('<span class="hl">│  MODE : CW / SSB / CONTEST           │</span>');
+                print('<span class="hl">└──────────────────────────────────────┘</span>');
+            },
+            roll: () => print(`🎲 rolled <span class="hl">${Math.floor(Math.random() * 6) + 1}</span>`),
+            matrix: () => {
+                const rows = 10;
+                const cols = 36;
+                for (let r = 0; r < rows; r += 1) {
+                    let line = '';
+                    for (let c = 0; c < cols; c += 1) {
+                        const ch = Math.random() > 0.5 ? '1' : '0';
+                        line += ch;
+                    }
+                    print(`<span class="hl">${line}</span>`);
+                }
+                print('<span class="dim">// wake up, neo...</span>');
+            },
+            clear: () => { body.innerHTML = ''; },
+        };
+
+        commands.cat = (arg) => {
+            if (arg === 'about.md') {
+                print('# 電気工学研究部 / DENKEN');
+                print('中央大学 理工学部 後楽園キャンパスを拠点に活動する');
+                print('電子工作・無線・ドローン・ソフトウェアのサークルです。');
+            } else if (arg === 'divisions.md') {
+                print('- <span class="hl">radio</span>    : JA1YGX を運営、コンテストが主軸');
+                print('- <span class="hl">drone</span>    : 空撮と飛行会、白門祭で上映');
+                print('- <span class="hl">mcu</span>      : 電子工作・PCB・マイコン制御');
+                print('- <span class="hl">software</span> : HP / アプリ / サーバー / AI');
+            } else if (arg === 'ja1ygx.txt') {
+                commands.ja1ygx();
+            } else {
+                print(`<span class="err">cat: ${arg || '(no file)'} : No such file</span>`);
+            }
+        };
+
+        const run = (raw) => {
+            const trimmed = raw.trim();
+            if (!trimmed) return;
+            echo(trimmed);
+            history.push(trimmed);
+            hPointer = history.length;
+            const [cmd, ...rest] = trimmed.split(/\s+/);
+            const handler = commands[cmd.toLowerCase()];
+            if (handler) handler(rest.join(' '));
+            else print(`<span class="err">command not found: ${cmd}</span> <span class="dim">(try help)</span>`);
+        };
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const value = input.value;
+            input.value = '';
+            run(value);
+        });
+
+        input.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                if (history.length === 0) return;
+                hPointer = Math.max(0, hPointer - 1);
+                input.value = history[hPointer] || '';
+            } else if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                if (history.length === 0) return;
+                hPointer = Math.min(history.length, hPointer + 1);
+                input.value = history[hPointer] || '';
+            }
+        });
+
+        chips.forEach((chip) => {
+            chip.addEventListener('click', () => {
+                run(chip.dataset.cmd);
+                input.focus();
+            });
+        });
+
+        print('<span class="hl">denken</span> shell v1.0 — type <span class="hl">help</span> to see commands.');
+    };
+
     normalizeInternalLinks();
     setupNav();
     setupReveal();
@@ -645,8 +1164,8 @@
     setupBackground();
 
     const division = document.body.dataset.division;
-    if (division === 'radio') setupRadio();
-    if (division === 'drone') setupDrone();
-    if (division === 'robot') setupRobot();
-    if (division === 'software') setupSoftware();
+    if (division === 'radio') { setupRadio(); setupCwKey(); }
+    if (division === 'drone') { setupDrone(); setupFpvMode(); }
+    if (division === 'robot') { setupRobot(); setupLab(); }
+    if (division === 'software') { setupSoftware(); setupTerminal(); }
 })();

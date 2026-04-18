@@ -14,8 +14,8 @@
     <link
         href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500;700&amp;family=Orbitron:wght@500;700;900&amp;family=Noto+Sans+JP:wght@300;500;700&amp;display=swap"
         rel="stylesheet" />
-    <link rel="stylesheet" href="division.css?v=20260418-2384" />
-    <script src="division.js?v=20260418-2384" defer></script>
+    <link rel="stylesheet" href="division.css?v=20260418-2385" />
+    <script src="division.js?v=20260418-2385" defer></script>
 </head>
 
 <body data-division="robot">
@@ -249,6 +249,54 @@
                         そのため、経験者だけでなく、これから触る人に向けた入口も意識されていることがわかります。
                     </p>
                 </article>
+            </div>
+        </section>
+
+        <section id="lab" class="section">
+            <div class="section__head">
+                <span class="section__num">04</span>
+                <h2 class="section__title">Lチカ LAB</h2>
+                <span class="section__sub">バーチャル ブレッドボードで電子工作</span>
+            </div>
+
+            <div class="lab">
+                <div class="lab__board reveal" id="lab-board" aria-hidden="true">
+                    <div class="lab__rail lab__rail--pos">+5V</div>
+                    <div class="lab__rail lab__rail--neg">GND</div>
+                    <div class="lab__chip">MCU</div>
+                    <div class="lab__resistor"></div>
+                    <div class="lab__led" id="lab-led"></div>
+                    <div class="lab__wire lab__wire--1"></div>
+                    <div class="lab__wire lab__wire--2"></div>
+                    <div class="lab__wire lab__wire--3"></div>
+                </div>
+
+                <div class="lab__side reveal">
+                    <article class="panel">
+                        <span class="panel__kicker">PATTERN</span>
+                        <h3 class="panel__title" id="lab-title">BLINK</h3>
+                        <p id="lab-desc">500ms ごとに LED を ON/OFF する最小 Lチカ。</p>
+                        <div class="chip-buttons" aria-label="pattern selector">
+                            <button type="button" class="is-active" data-pattern="blink">BLINK</button>
+                            <button type="button" data-pattern="fade">FADE</button>
+                            <button type="button" data-pattern="sos">SOS</button>
+                        </div>
+                    </article>
+
+                    <pre class="lab__code" id="lab-code"><code></code></pre>
+
+                    <div class="lab__controls">
+                        <button class="btn btn--primary" id="lab-run" type="button">
+                            <span>RUN</span>
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M5 4l14 8-14 8z" fill="currentColor" />
+                            </svg>
+                        </button>
+                        <button class="btn btn--ghost" id="lab-stop" type="button">
+                            <span>STOP</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </section>
 
