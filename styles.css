@@ -2216,7 +2216,8 @@ canvas {
 
     .assembly__scene {
         display: block;
-        opacity: 0.64;
+        opacity: 0.46;
+        clip-path: inset(38% 0 0 0);
     }
 
     .assembly__overlay {
@@ -2238,20 +2239,29 @@ canvas {
             1rem
             calc(1rem + env(safe-area-inset-bottom, 0px));
         background:
-            linear-gradient(180deg, rgba(4, 8, 14, 0.6) 0%, rgba(4, 8, 14, 0.22) 32%, rgba(4, 8, 14, 0.5) 100%);
+            linear-gradient(180deg, rgba(4, 8, 14, 0.9) 0%, rgba(4, 8, 14, 0.82) 20%, rgba(4, 8, 14, 0.34) 54%, rgba(4, 8, 14, 0.56) 100%);
     }
 
     .assembly__overlay::before {
         content: "";
         position: absolute;
+        inset: 0 0 36% 0;
+        background:
+            linear-gradient(180deg, rgba(4, 8, 14, 0.98) 0%, rgba(4, 8, 14, 0.95) 35%, rgba(4, 8, 14, 0.68) 72%, transparent 100%);
+        pointer-events: none;
+    }
+
+    .assembly__overlay::after {
+        content: "";
+        position: absolute;
         left: 50%;
-        top: 57%;
-        width: min(96vw, 32rem);
-        height: min(88vw, 30rem);
+        top: 55%;
+        width: min(98vw, 34rem);
+        height: min(92vw, 31rem);
         transform: translate(-50%, -50%);
         background:
-            radial-gradient(circle at 50% 44%, rgba(4, 8, 14, 0.96) 0%, rgba(4, 8, 14, 0.93) 34%, rgba(4, 8, 14, 0.72) 56%, rgba(4, 8, 14, 0.24) 74%, transparent 86%);
-        filter: blur(18px);
+            radial-gradient(circle at 50% 46%, rgba(4, 8, 14, 0.98) 0%, rgba(4, 8, 14, 0.95) 30%, rgba(4, 8, 14, 0.84) 50%, rgba(4, 8, 14, 0.46) 66%, transparent 82%);
+        filter: blur(16px);
         pointer-events: none;
     }
 
@@ -2273,7 +2283,7 @@ canvas {
     .assembly__copy {
         align-self: start;
         font-size: 0.84rem;
-        max-width: 250px;
+        max-width: 238px;
         text-shadow: 0 8px 24px rgba(0, 0, 0, 0.42);
     }
 

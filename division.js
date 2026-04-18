@@ -7,7 +7,7 @@
 
     const qs = (selector, root = document) => root.querySelector(selector);
     const qsa = (selector, root = document) => Array.from(root.querySelectorAll(selector));
-    const APP_VERSION = '20260418-2339';
+    const APP_VERSION = '20260418-2348';
 
     const toAbsolutePageUrl = (rawHref) => {
         if (!rawHref) return rawHref;
