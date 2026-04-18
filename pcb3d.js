@@ -237,7 +237,7 @@
         camera.lookAt(0, 0, 0);
 
         const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: !isSmall() });
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, isSmall() ? 1.5 : 2));
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, isSmall() ? 1.2 : 2));
         container.appendChild(renderer.domElement);
 
         // lights
@@ -673,7 +673,7 @@
 
         const tick = () => {
             currentP += (targetP - currentP) * 0.1;
-            root.rotation.y += 0.0025;
+            root.rotation.y += isSmall() ? 0.0014 : 0.0025;
             applyProgress(currentP);
             renderer.render(scene, camera);
             requestAnimationFrame(tick);
@@ -683,14 +683,24 @@
 
     /* ---------- kick off (after loader finish) ---------- */
     const start = () => {
-        if (isSmall()) {
-            document.documentElement.classList.add('no-pcb3d');
-            return;
-        }
+        let started = false;
         try {
-            startHero();
-            startAssembly();
+            if (!isSmall()) {
+                startHero();
+                started = true;
+            }
         } catch (_) {
+            /* hero can fail independently */
+        }
+
+        try {
+            startAssembly();
+            started = true;
+        } catch (_) {
+            /* assembly can fail independently */
+        }
+
+        if (!started) {
             document.documentElement.classList.add('no-pcb3d');
         }
     };
