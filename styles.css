@@ -2134,6 +2134,15 @@ canvas {
     }
 
     .assembly__fallback {
+        display: block;
+        max-width: none;
+        align-self: end;
+        padding: 0.8rem 0.95rem;
+        background: rgba(5, 8, 16, 0.68);
+        font-size: 0.78rem;
+    }
+
+    .assembly__scene.is-ready + .assembly__overlay .assembly__fallback {
         display: none;
     }
 

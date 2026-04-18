@@ -257,14 +257,31 @@
         scene.add(root);
 
         const resize = () => {
-            const w = container.clientWidth, h = container.clientHeight;
-            if (!w || !h) return;
+            const rect = container.getBoundingClientRect();
+            const w = Math.round(rect.width || container.clientWidth);
+            const h = Math.round(rect.height || container.clientHeight);
+            if (!w || !h) return false;
             renderer.setSize(w, h, false);
             camera.aspect = w / h;
             camera.updateProjectionMatrix();
+            container.classList.add('is-ready');
+            return true;
         };
-        resize();
+        let resizeAttempts = 0;
+        const ensureResize = () => {
+            if (resize()) return;
+            if (resizeAttempts >= 20) return;
+            resizeAttempts += 1;
+            requestAnimationFrame(ensureResize);
+        };
+        ensureResize();
+        setTimeout(resize, 160);
+        setTimeout(resize, 600);
         window.addEventListener('resize', resize);
+        if (typeof ResizeObserver !== 'undefined') {
+            const ro = new ResizeObserver(() => resize());
+            ro.observe(container);
+        }
 
         return { scene, camera, renderer, root, resize };
     };
