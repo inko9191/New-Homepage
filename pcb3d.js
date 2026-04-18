@@ -467,7 +467,7 @@
         const { scene, camera, renderer, root } = setupScene(el, { tilt: 0.32 });
         if (isSmall()) {
             root.scale.setScalar(0.52);
-            root.position.set(0.16, -1.34, 0);
+            root.position.set(0.16, -1.5, 0);
             root.rotation.x = 0.16;
         }
 
@@ -691,8 +691,8 @@
             if (isSmall()) {
                 camera.position.x = 0.16;
                 camera.position.z = lerp(12.2, 10.5, easeOutCubic(p));
-                camera.position.y = lerp(6.1, 5.0, easeOutCubic(p));
-                camera.lookAt(0.14, -1.12, 0);
+                camera.position.y = lerp(6.25, 5.15, easeOutCubic(p));
+                camera.lookAt(0.14, -1.28, 0);
             } else {
                 camera.position.x = 0;
                 camera.position.z = lerp(7.2, 5.6, easeOutCubic(p));

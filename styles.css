@@ -2210,7 +2210,7 @@ canvas {
         position: sticky;
         top: 0;
         display: grid;
-        grid-template-rows: 52% 48%;
+        grid-template-rows: 54% 46%;
         height: 100vh;
         height: 100dvh;
         min-height: 560px;
@@ -2220,7 +2220,7 @@ canvas {
 
     .assembly__scene {
         display: block;
-        inset: 52% 0 0 0;
+        inset: 56% 0 0 0;
         opacity: 0.72;
         clip-path: none;
         border-top: 1px solid rgba(0, 229, 255, 0.18);
@@ -2254,7 +2254,7 @@ canvas {
     .assembly__overlay::before {
         content: "";
         position: absolute;
-        inset: 0 0 48% 0;
+        inset: 0 0 46% 0;
         background:
             linear-gradient(180deg, rgba(4, 8, 14, 0.98) 0%, rgba(4, 8, 14, 0.96) 100%);
         border-bottom: 1px solid rgba(0, 229, 255, 0.18);
@@ -2342,7 +2342,7 @@ canvas {
         border-left: 0;
         border-top: 1px solid var(--line);
         padding-left: 0;
-        padding-top: 0.85rem;
+        padding-top: 1rem;
         flex-direction: row;
         flex-wrap: wrap;
         gap: 0.45rem 0.8rem;
@@ -2361,6 +2361,7 @@ canvas {
         align-self: end;
         justify-self: stretch;
         gap: 0.45rem;
+        padding-bottom: 0.15rem;
     }
 
     .assembly__progress {
