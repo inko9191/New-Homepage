@@ -333,7 +333,7 @@ canvas {
 
 .division-hero {
     display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 560px);
     gap: 2rem;
     align-items: center;
     min-height: calc(100vh - 8rem);
@@ -433,6 +433,7 @@ canvas {
 
 .division-hero__visual {
     position: relative;
+    min-width: 0;
     min-height: 560px;
     display: grid;
     place-items: center;
@@ -440,14 +441,14 @@ canvas {
 
 .visual-shell {
     position: relative;
-    width: min(100%, 540px);
-    min-height: 520px;
+    width: min(100%, 560px);
+    min-height: 0;
     border: 1px solid var(--line);
     background:
         radial-gradient(circle at top right, var(--accent-soft), transparent 40%),
         rgba(7, 10, 20, 0.92);
     box-shadow: 0 28px 80px rgba(0, 0, 0, 0.34);
-    overflow: hidden;
+    overflow: visible;
 }
 
 .visual-shell::before {
@@ -520,6 +521,7 @@ canvas {
 .cta-panel,
 .source-card {
     position: relative;
+    min-width: 0;
     overflow: hidden;
     border: 1px solid var(--line);
     background: linear-gradient(180deg, rgba(10, 15, 30, 0.86), rgba(5, 8, 16, 0.95));
@@ -563,6 +565,8 @@ canvas {
 .source-card__title {
     margin-top: 0.5rem;
     font-size: 1.2rem;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .panel p,
@@ -583,6 +587,8 @@ canvas {
     font-family: var(--font-dis);
     font-size: clamp(1.8rem, 4vw, 2.5rem);
     line-height: 1;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .metric__note {
@@ -626,12 +632,15 @@ canvas {
 
 .chip-buttons button {
     padding: 0.55rem 0.85rem;
+    min-width: 0;
     border: 1px solid var(--line);
     background: rgba(255, 255, 255, 0.02);
     color: var(--ink-dim);
     font-family: var(--font-mono);
     font-size: 0.66rem;
     letter-spacing: 0.16em;
+    overflow-wrap: anywhere;
+    word-break: break-word;
     transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
 }
 
@@ -716,6 +725,7 @@ canvas {
     padding: 1.4rem;
     display: grid;
     gap: 1.1rem;
+    min-width: 0;
 }
 
 .radio-console__screen {
@@ -739,6 +749,8 @@ canvas {
     font-family: var(--font-dis);
     font-size: clamp(2rem, 6vw, 3.4rem);
     line-height: 1;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .radio-console__title {
@@ -780,11 +792,18 @@ canvas {
 .radio-console__labels {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     gap: 0.6rem;
     font-family: var(--font-mono);
     font-size: 0.62rem;
     letter-spacing: 0.18em;
     color: var(--ink-dim);
+}
+
+.radio-console__labels span {
+    flex: 1 1 18%;
+    min-width: 2.8rem;
+    text-align: center;
 }
 
 /* ============================================================
@@ -795,11 +814,12 @@ canvas {
     padding: 1rem;
     display: grid;
     gap: 1rem;
+    min-width: 0;
 }
 
 .fpv__view {
     position: relative;
-    min-height: 360px;
+    min-height: 400px;
     overflow: hidden;
     border: 1px solid var(--line);
     background:
@@ -872,7 +892,9 @@ canvas {
     padding: 0.65rem 0.75rem;
     border: 1px solid rgba(255, 255, 255, 0.14);
     background: rgba(5, 8, 16, 0.38);
-    width: max-content;
+    width: auto;
+    max-width: 100%;
+    min-width: 0;
 }
 
 .fpv__hud-box--right {
@@ -892,11 +914,12 @@ canvas {
     padding: 1rem;
     display: grid;
     gap: 1rem;
+    min-width: 0;
 }
 
 .bench__board {
     position: relative;
-    min-height: 360px;
+    min-height: 400px;
     overflow: hidden;
     border: 1px solid var(--line);
     background:
@@ -992,11 +1015,12 @@ canvas {
     padding: 1rem;
     display: grid;
     gap: 1rem;
+    min-width: 0;
 }
 
 .system-map__scene {
     position: relative;
-    min-height: 360px;
+    min-height: 400px;
     overflow: hidden;
     border: 1px solid var(--line);
     background:
@@ -1024,6 +1048,7 @@ canvas {
 .system-node {
     position: absolute;
     width: 120px;
+    max-width: calc(100% - 1rem);
     padding: 0.8rem 0.7rem;
     border: 1px solid rgba(255, 255, 255, 0.16);
     background: rgba(8, 12, 24, 0.9);
@@ -1040,6 +1065,8 @@ canvas {
     margin-top: 0.35rem;
     font-size: 0.95rem;
     color: var(--ink);
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .system-node--website {
@@ -1092,13 +1119,15 @@ canvas {
 .system-map__console-lines li {
     color: var(--ink-dim);
     font-size: 0.8rem;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 /* ============================================================
    Responsive
    ============================================================ */
 
-@media (max-width: 1100px) {
+@media (max-width: 1280px) {
     .division-hero {
         grid-template-columns: 1fr;
         min-height: auto;
@@ -1109,7 +1138,7 @@ canvas {
     }
 
     .grid-3 {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
@@ -1249,11 +1278,12 @@ canvas {
     }
 
     .division-hero__visual {
-        min-height: 420px;
+        min-height: auto;
     }
 
     .visual-shell {
-        min-height: 400px;
+        width: 100%;
+        min-height: auto;
     }
 
     .section {
@@ -1289,6 +1319,29 @@ canvas {
         font-size: clamp(1.5rem, 8vw, 2.1rem);
     }
 
+    .radio-console,
+    .fpv,
+    .bench,
+    .system-map {
+        padding: 0.8rem;
+        gap: 0.8rem;
+    }
+
+    .radio-console__screen,
+    .system-map__console {
+        padding: 0.95rem;
+    }
+
+    .radio-console__freq {
+        font-size: clamp(1.6rem, 9vw, 2.45rem);
+    }
+
+    .radio-console__labels {
+        gap: 0.35rem 0.45rem;
+        font-size: 0.55rem;
+        letter-spacing: 0.1em;
+    }
+
     .chip-buttons {
         gap: 0.5rem;
     }
@@ -1298,8 +1351,46 @@ canvas {
         text-align: center;
     }
 
+    .fpv__view,
+    .bench__board,
+    .system-map__scene {
+        min-height: 300px;
+    }
+
+    .fpv__hud {
+        inset: 0.7rem;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.55rem;
+        font-size: 0.58rem;
+    }
+
+    .fpv__hud strong {
+        font-size: 0.82rem;
+    }
+
+    .fpv__hud-box--right {
+        justify-self: auto;
+    }
+
+    .bench__legend {
+        position: static;
+        left: auto;
+        right: auto;
+        bottom: auto;
+        padding: 0.85rem 0.85rem 0;
+    }
+
+    .bench__legend li {
+        font-size: 0.56rem;
+        letter-spacing: 0.1em;
+    }
+
     .grid-2,
     .grid-4 {
+        grid-template-columns: 1fr;
+    }
+
+    .grid-3 {
         grid-template-columns: 1fr;
     }
 
@@ -1317,8 +1408,35 @@ canvas {
     }
 
     .system-node {
-        width: 104px;
-        font-size: 0.62rem;
+        width: 82px;
+        padding: 0.55rem 0.45rem;
+        font-size: 0.54rem;
+        letter-spacing: 0.08em;
+    }
+
+    .system-node strong {
+        font-size: 0.72rem;
+    }
+
+    .system-node--website {
+        top: 12%;
+        left: 6%;
+    }
+
+    .system-node--app {
+        top: auto;
+        left: 8%;
+        bottom: 14%;
+    }
+
+    .system-node--server {
+        top: 18%;
+        right: 8%;
+    }
+
+    .system-node--ai {
+        right: 6%;
+        bottom: 12%;
     }
 }
 
