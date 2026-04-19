@@ -1927,7 +1927,6 @@ canvas {
 
 .joinflow__panel,
 .joinflow__meta-card,
-.status-panel,
 .contact__card {
     position: relative;
     overflow: hidden;
@@ -1945,7 +1944,6 @@ canvas {
 
 .joinflow__panel::before,
 .joinflow__meta-card::before,
-.status-panel::before,
 .contact__card::before {
     content: "";
     position: absolute;
@@ -1954,8 +1952,7 @@ canvas {
     background: radial-gradient(circle at top right, rgba(0, 229, 255, 0.12), transparent 52%);
 }
 
-.contact__kicker,
-.status-panel__label {
+.contact__kicker {
     display: inline-block;
     font-family: var(--font-mono);
     font-size: 0.68rem;
@@ -2132,7 +2129,7 @@ canvas {
 
 .join__support {
     display: grid;
-    grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+    grid-template-columns: 1fr;
     gap: 1.4rem;
     margin-top: 1.4rem;
     align-items: stretch;
@@ -2142,73 +2139,7 @@ canvas {
     display: flex;
     flex-direction: column;
     justify-content: center;
-}
-
-.status-panel {
-    padding: 1.8rem;
-}
-
-.status-panel__top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 1.4rem;
-}
-
-.status-panel__live {
-    font-family: var(--font-dis);
-    font-size: 0.86rem;
-    letter-spacing: 0.2em;
-}
-
-.status-panel[data-state="loading"] .status-panel__live {
-    color: var(--yellow);
-}
-
-.status-panel[data-state="live"] .status-panel__live {
-    color: var(--green);
-}
-
-.status-panel[data-state="offline"] .status-panel__live {
-    color: var(--pink);
-}
-
-.panel__grid {
-    display: grid;
-    grid-template-columns: 90px 1fr;
-    gap: 0.7rem 1rem;
-    margin-bottom: 1.2rem;
-    padding: 1rem;
-    border: 1px solid var(--line);
-    background: rgba(255, 255, 255, 0.02);
-    font-family: var(--font-mono);
-    font-size: 0.76rem;
-    letter-spacing: 0.18em;
-}
-
-.panel__grid span:nth-child(odd) {
-    color: var(--ink-dim);
-}
-
-.panel__grid span:nth-child(even) {
-    color: var(--ink);
-}
-
-.status-panel__note {
-    color: var(--ink-dim);
-    font-size: 0.88rem;
-}
-
-.panel__source {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    margin-top: 1.1rem;
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.18em;
-    color: var(--cyan);
+    max-width: 760px;
 }
 
 .contact {
@@ -2774,7 +2705,6 @@ canvas {
     .cross__visual,
     .cross__fact,
     .joinflow__panel,
-    .status-panel,
     .contact__card {
         padding: 1.25rem;
     }
@@ -2883,9 +2813,8 @@ canvas {
         inset: 0 0 40% 0;
         width: 100%;
         max-width: 100%;
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-template-rows: auto minmax(0, 1fr) auto auto auto;
+        display: flex;
+        flex-direction: column;
         gap: 0.55rem;
         padding:
             calc(4.2rem + env(safe-area-inset-top, 0px))
@@ -2895,7 +2824,13 @@ canvas {
         pointer-events: auto;
     }
 
+    .joinflow__overlay > * {
+        min-width: 0;
+    }
+
     .joinflow__head {
+        flex: 0 0 auto;
+        width: 100%;
         align-items: flex-start;
         gap: 0.45rem;
         flex-direction: column;
@@ -2912,6 +2847,8 @@ canvas {
     }
 
     .joinflow__panel {
+        flex: 1 1 auto;
+        width: 100%;
         max-width: none;
         padding: 0.95rem;
         min-height: 0;
@@ -2966,6 +2903,8 @@ canvas {
     }
 
     .joinflow__meta {
+        flex: 0 0 auto;
+        width: 100%;
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 0.5rem;
@@ -2987,6 +2926,9 @@ canvas {
     }
 
     .joinflow__steps {
+        flex: 0 0 auto;
+        width: 100%;
+        margin-top: auto;
         display: flex;
         flex-wrap: nowrap;
         justify-content: space-between;
@@ -3007,6 +2949,8 @@ canvas {
     }
 
     .joinflow__progress-wrap {
+        flex: 0 0 auto;
+        width: 100%;
         display: flex;
         align-items: center;
         gap: 0.6rem;
