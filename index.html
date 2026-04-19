@@ -16,10 +16,10 @@
     <link
         href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500;700&amp;family=Orbitron:wght@500;700;900&amp;family=Noto+Sans+JP:wght@300;500;700&amp;display=swap"
         rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260419-0012" />
+    <link rel="stylesheet" href="styles.css?v=20260419-1315" />
     <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js" defer></script>
-    <script src="script.js?v=20260419-0012" defer></script>
-    <script src="pcb3d.js?v=20260418-2385" defer></script>
+    <script src="script.js?v=20260419-1315" defer></script>
+    <script src="pcb3d.js?v=20260419-1315" defer></script>
 </head>
 
 <body>
@@ -178,6 +178,7 @@
                 </div>
                 <a href="#activities">ACTIVITIES</a>
                 <a href="#assembly">ASSEMBLY</a>
+                <a href="#cross">CROSS</a>
                 <a href="#join">JOIN</a>
                 <a href="#contact">CONTACT</a>
             </nav>
@@ -521,9 +522,137 @@
                 </div>
             </section>
 
-            <section id="join" class="section section--join">
+            <section id="cross" class="section section--cross">
                 <div class="section__head">
                     <span class="section__num">05</span>
+                    <h2 class="section__title">CROSS DIVISION</h2>
+                    <span class="section__sub">班どうしの接続</span>
+                </div>
+
+                <div class="cross reveal">
+                    <article class="cross__copy">
+                        <p class="cross__eyebrow" id="cross-kicker">RADIO × DRONE</p>
+                        <h3 class="cross__title" id="cross-title">空撮と通信のラインがつながる</h3>
+                        <p class="cross__body" id="cross-body">
+                            ドローン班の FPV と無線班の知識は、別々の活動ではなく「通信して飛ばす」という一本の線でつながっています。
+                            離れた対象と安定してやり取りする感覚は、電研の中でもかなり共有されています。
+                        </p>
+                        <ul class="cross__list" id="cross-list">
+                            <li>FPV には第四級以上のアマチュア無線資格が必要</li>
+                            <li>飛行と通信は切り離せない</li>
+                            <li>イベント運用でも無線の視点が活きる</li>
+                        </ul>
+
+                        <div class="cross__facts" aria-hidden="true">
+                            <div class="cross__fact">
+                                <span>ROUTE</span>
+                                <strong id="cross-route">AIR LINK</strong>
+                            </div>
+                            <div class="cross__fact">
+                                <span>TOOLS</span>
+                                <strong id="cross-tools">FPV / RF</strong>
+                            </div>
+                            <div class="cross__fact">
+                                <span>OUTPUT</span>
+                                <strong id="cross-output">COMMS</strong>
+                            </div>
+                        </div>
+
+                        <div class="cross__selector" aria-label="cross division selector">
+                            <button class="is-active" type="button" data-cross="0">RADIO × DRONE</button>
+                            <button type="button" data-cross="1">DRONE × MCU / ROBOT</button>
+                            <button type="button" data-cross="2">MCU / ROBOT × SOFTWARE</button>
+                            <button type="button" data-cross="3">SOFTWARE × RADIO</button>
+                        </div>
+                    </article>
+
+                    <div class="cross__visual" aria-hidden="true">
+                        <svg class="cross__svg" viewBox="0 0 920 560" preserveAspectRatio="xMidYMid meet">
+                            <defs>
+                                <linearGradient id="cross-bus-grad" x1="0" y1="0" x2="1" y2="0">
+                                    <stop offset="0%" stop-color="#00e5ff" />
+                                    <stop offset="50%" stop-color="#9cf5ff" />
+                                    <stop offset="100%" stop-color="#b400ff" />
+                                </linearGradient>
+                                <filter id="cross-glow" x="-50%" y="-50%" width="200%" height="200%">
+                                    <feGaussianBlur stdDeviation="4" result="blur" />
+                                    <feMerge>
+                                        <feMergeNode in="blur" />
+                                        <feMergeNode in="SourceGraphic" />
+                                    </feMerge>
+                                </filter>
+                            </defs>
+
+                            <rect class="cross__frame" x="28" y="28" width="864" height="504" rx="28" />
+                            <rect class="cross__bus" x="314" y="214" width="292" height="132" rx="22" />
+                            <text class="cross__bus-label" x="460" y="290" text-anchor="middle">DENKEN BUS</text>
+
+                            <rect class="cross__node" x="88" y="88" width="170" height="84" rx="16" />
+                            <rect class="cross__node" x="662" y="88" width="170" height="84" rx="16" />
+                            <rect class="cross__node" x="88" y="388" width="170" height="84" rx="16" />
+                            <rect class="cross__node" x="662" y="388" width="170" height="84" rx="16" />
+
+                            <text class="cross__label" x="173" y="124" text-anchor="middle">RADIO</text>
+                            <text class="cross__label" x="173" y="148" text-anchor="middle">JA1YGX / RF</text>
+                            <text class="cross__label" x="747" y="124" text-anchor="middle">DRONE</text>
+                            <text class="cross__label" x="747" y="148" text-anchor="middle">FPV / AERIAL</text>
+                            <text class="cross__label" x="173" y="424" text-anchor="middle">MCU / ROBOT</text>
+                            <text class="cross__label" x="173" y="448" text-anchor="middle">CTRL / PCB</text>
+                            <text class="cross__label" x="747" y="424" text-anchor="middle">SOFTWARE</text>
+                            <text class="cross__label" x="747" y="448" text-anchor="middle">UI / DATA</text>
+
+                            <path class="cross__trace" d="M258 130 H314" />
+                            <path class="cross__trace" d="M662 130 H606" />
+                            <path class="cross__trace" d="M258 430 H314" />
+                            <path class="cross__trace" d="M662 430 H606" />
+                            <path class="cross__trace" d="M173 172 V256 H314" />
+                            <path class="cross__trace" d="M747 172 V256 H606" />
+                            <path class="cross__trace" d="M173 388 V304 H314" />
+                            <path class="cross__trace" d="M747 388 V304 H606" />
+                            <circle class="cross__via" cx="314" cy="256" r="6" />
+                            <circle class="cross__via" cx="606" cy="256" r="6" />
+                            <circle class="cross__via" cx="314" cy="304" r="6" />
+                            <circle class="cross__via" cx="606" cy="304" r="6" />
+
+                            <g class="cross__pair cross__pair--0 is-active" data-cross-pair="0">
+                                <path class="cross__signal" d="M173 172 V256 H314" />
+                                <path class="cross__signal" d="M747 172 V256 H606" />
+                                <path class="cross__signal cross__signal--bus" d="M314 256 H606" />
+                                <circle class="cross__pulse" cx="314" cy="256" r="7" />
+                                <circle class="cross__pulse" cx="606" cy="256" r="7" />
+                            </g>
+
+                            <g class="cross__pair cross__pair--1" data-cross-pair="1">
+                                <path class="cross__signal" d="M173 388 V304 H314" />
+                                <path class="cross__signal" d="M747 172 V256 H606" />
+                                <path class="cross__signal cross__signal--bus" d="M314 304 H460 V256 H606" />
+                                <circle class="cross__pulse" cx="314" cy="304" r="7" />
+                                <circle class="cross__pulse" cx="606" cy="256" r="7" />
+                            </g>
+
+                            <g class="cross__pair cross__pair--2" data-cross-pair="2">
+                                <path class="cross__signal" d="M173 388 V304 H314" />
+                                <path class="cross__signal" d="M747 388 V304 H606" />
+                                <path class="cross__signal cross__signal--bus" d="M314 304 H606" />
+                                <circle class="cross__pulse" cx="314" cy="304" r="7" />
+                                <circle class="cross__pulse" cx="606" cy="304" r="7" />
+                            </g>
+
+                            <g class="cross__pair cross__pair--3" data-cross-pair="3">
+                                <path class="cross__signal" d="M173 172 V256 H314" />
+                                <path class="cross__signal" d="M747 388 V304 H606" />
+                                <path class="cross__signal cross__signal--bus" d="M314 256 H460 V304 H606" />
+                                <circle class="cross__pulse" cx="314" cy="256" r="7" />
+                                <circle class="cross__pulse" cx="606" cy="304" r="7" />
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </section>
+
+            <section id="join" class="section section--join">
+                <div class="section__head">
+                    <span class="section__num">06</span>
                     <h2 class="section__title">JOIN</h2>
                     <span class="section__sub">見学・参加について</span>
                 </div>

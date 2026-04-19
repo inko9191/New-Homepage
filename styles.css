@@ -1506,6 +1506,240 @@ canvas {
 }
 
 /* ============================================================
+   CROSS DIVISION
+   ============================================================ */
+
+.section--cross {
+    position: relative;
+}
+
+.cross {
+    display: grid;
+    grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+    gap: 1.4rem;
+    align-items: stretch;
+}
+
+.cross__copy,
+.cross__visual,
+.cross__fact {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(10, 15, 30, 0.88), rgba(5, 8, 16, 0.94));
+}
+
+.cross__copy,
+.cross__visual {
+    min-height: 100%;
+}
+
+.cross__copy::before,
+.cross__visual::before,
+.cross__fact::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(circle at top right, rgba(0, 229, 255, 0.12), transparent 52%);
+}
+
+.cross__copy {
+    padding: 1.5rem;
+}
+
+.cross__eyebrow {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.28em;
+    color: var(--cyan);
+}
+
+.cross__title {
+    margin-top: 0.4rem;
+    font-size: clamp(1.45rem, 2.6vw, 2.2rem);
+    line-height: 1.16;
+}
+
+.cross__body {
+    margin-top: 0.85rem;
+    color: var(--ink-dim);
+    line-height: 1.78;
+}
+
+.cross__list {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    list-style: none;
+}
+
+.cross__list li {
+    position: relative;
+    padding-left: 1rem;
+    color: var(--ink);
+    font-size: 0.9rem;
+}
+
+.cross__list li::before {
+    content: "";
+    position: absolute;
+    top: 0.72em;
+    left: 0;
+    width: 0.38rem;
+    height: 1px;
+    background: var(--cyan);
+}
+
+.cross__facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.7rem;
+    margin-top: 1.15rem;
+}
+
+.cross__fact {
+    padding: 0.8rem 0.85rem;
+}
+
+.cross__fact span {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    color: var(--ink-dim);
+}
+
+.cross__fact strong {
+    display: block;
+    margin-top: 0.45rem;
+    font-family: var(--font-dis);
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    color: var(--ink);
+}
+
+.cross__selector {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+    margin-top: 1.2rem;
+}
+
+.cross__selector button {
+    padding: 0.78rem 0.85rem;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--ink-dim);
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.25s ease, background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+
+.cross__selector button:hover,
+.cross__selector button:focus-visible {
+    border-color: var(--cyan);
+    color: var(--ink);
+    outline: none;
+}
+
+.cross__selector button.is-active {
+    border-color: rgba(0, 229, 255, 0.28);
+    background: rgba(0, 229, 255, 0.1);
+    color: var(--ink);
+    transform: translateY(-1px);
+}
+
+.cross__visual {
+    padding: 1rem;
+}
+
+.cross__svg {
+    width: 100%;
+    height: 100%;
+    min-height: 500px;
+    display: block;
+}
+
+.cross__frame {
+    fill: rgba(7, 11, 20, 0.78);
+    stroke: rgba(120, 154, 176, 0.22);
+    stroke-width: 1.6;
+}
+
+.cross__bus {
+    fill: rgba(8, 14, 24, 0.9);
+    stroke: rgba(130, 170, 190, 0.28);
+    stroke-width: 1.8;
+}
+
+.cross__bus-label,
+.cross__label {
+    fill: rgba(230, 246, 255, 0.9);
+    font-family: var(--font-mono);
+    font-size: 18px;
+    letter-spacing: 0.18em;
+}
+
+.cross__label {
+    fill: rgba(210, 234, 248, 0.76);
+    font-size: 15px;
+}
+
+.cross__node {
+    fill: rgba(8, 16, 26, 0.62);
+    stroke: rgba(124, 160, 180, 0.22);
+    stroke-width: 1.5;
+}
+
+.cross__trace {
+    fill: none;
+    stroke: rgba(126, 164, 184, 0.18);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.cross__via {
+    fill: rgba(126, 164, 184, 0.22);
+}
+
+.cross__pair {
+    opacity: 0.16;
+    transition: opacity 0.25s ease;
+}
+
+.cross__pair.is-active {
+    opacity: 1;
+}
+
+.cross__signal {
+    fill: none;
+    stroke: url(#cross-bus-grad);
+    stroke-width: 5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 18 12;
+    filter: url(#cross-glow);
+    animation: routeDrift 8s linear infinite;
+}
+
+.cross__signal--bus {
+    stroke-width: 6;
+}
+
+.cross__pulse {
+    fill: #a6f6ff;
+    filter: url(#cross-glow);
+    animation: signalPulse 1.8s ease-in-out infinite;
+}
+
+/* ============================================================
    JOIN / CONTACT
    ============================================================ */
 
@@ -1775,6 +2009,23 @@ canvas {
 
 .joinflow__actions .btn {
     pointer-events: auto;
+    justify-content: space-between;
+    min-height: 3.25rem;
+    padding-inline: 1.15rem;
+}
+
+.joinflow__actions .btn span {
+    display: block;
+    flex: 1 1 auto;
+    min-width: 0;
+    white-space: normal;
+    line-height: 1.28;
+    text-align: center;
+    text-wrap: balance;
+}
+
+.joinflow__actions .btn svg {
+    flex: 0 0 18px;
 }
 
 .joinflow__meta {
@@ -2248,6 +2499,10 @@ canvas {
         width: 55%;
     }
 
+    .cross {
+        grid-template-columns: 1fr;
+    }
+
     .join__support {
         grid-template-columns: 1fr;
     }
@@ -2515,6 +2770,89 @@ canvas {
         height: 300vh;
     }
 
+    .cross__copy,
+    .cross__visual,
+    .cross__fact,
+    .joinflow__panel,
+    .status-panel,
+    .contact__card {
+        padding: 1.25rem;
+    }
+
+    .cross__copy {
+        padding: 1rem;
+    }
+
+    .cross__title {
+        font-size: 1.2rem;
+        line-height: 1.24;
+    }
+
+    .cross__body {
+        font-size: 0.82rem;
+        line-height: 1.66;
+    }
+
+    .cross__list {
+        margin-top: 0.75rem;
+        gap: 0.35rem;
+    }
+
+    .cross__list li {
+        font-size: 0.76rem;
+        padding-left: 0.85rem;
+    }
+
+    .cross__facts {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.45rem;
+        margin-top: 0.95rem;
+    }
+
+    .cross__fact {
+        padding: 0.68rem 0.58rem;
+    }
+
+    .cross__fact span {
+        font-size: 0.46rem;
+        letter-spacing: 0.16em;
+    }
+
+    .cross__fact strong {
+        font-size: 0.62rem;
+        letter-spacing: 0.09em;
+    }
+
+    .cross__selector {
+        grid-template-columns: 1fr;
+        gap: 0.45rem;
+        margin-top: 0.95rem;
+    }
+
+    .cross__selector button {
+        padding: 0.72rem 0.8rem;
+        font-size: 0.58rem;
+        letter-spacing: 0.12em;
+    }
+
+    .cross__visual {
+        padding: 0.7rem;
+    }
+
+    .cross__svg {
+        min-height: 320px;
+    }
+
+    .cross__bus-label,
+    .cross__label {
+        font-size: 11px;
+        letter-spacing: 0.14em;
+    }
+
+    .cross__signal {
+        stroke-width: 3.8;
+    }
+
     .joinflow__sticky {
         height: 100svh;
         min-height: 540px;
@@ -2576,12 +2914,6 @@ canvas {
         letter-spacing: 0.18em;
     }
 
-    .joinflow__panel,
-    .status-panel,
-    .contact__card {
-        padding: 1.25rem;
-    }
-
     .joinflow__panel {
         flex: 0 0 auto;
         max-width: none;
@@ -2615,7 +2947,21 @@ canvas {
 
     .joinflow__actions .btn {
         width: 100%;
-        justify-content: center;
+        justify-content: space-between;
+        gap: 0.45rem;
+        font-size: 0.58rem;
+        letter-spacing: 0.1em;
+        padding: 0.9rem 0.92rem;
+        min-height: 3.1rem;
+    }
+
+    .joinflow__actions .btn span {
+        letter-spacing: 0.08em;
+    }
+
+    .joinflow__actions .btn svg {
+        width: 16px;
+        height: 16px;
     }
 
     .joinflow__meta {
@@ -2928,6 +3274,25 @@ canvas {
     .footer__mid,
     .footer__copy {
         text-align: center;
+    }
+}
+
+@media (max-width: 430px) {
+    .joinflow__actions .btn {
+        font-size: 0.54rem;
+        letter-spacing: 0.08em;
+        padding: 0.82rem 0.78rem;
+        min-height: 2.95rem;
+    }
+
+    .joinflow__actions .btn span {
+        letter-spacing: 0.05em;
+        line-height: 1.22;
+    }
+
+    .joinflow__actions .btn svg {
+        width: 15px;
+        height: 15px;
     }
 }
 

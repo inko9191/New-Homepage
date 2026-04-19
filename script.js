@@ -5,7 +5,7 @@
 (() => {
     'use strict';
 
-    const APP_VERSION = '20260419-0012';
+    const APP_VERSION = '20260419-1315';
 
     const toAbsolutePageUrl = (rawHref) => {
         if (!rawHref) return rawHref;
@@ -539,6 +539,152 @@
     };
 
     setupJoinFlow();
+
+    /* ---------- CROSS DIVISION ---------- */
+    const setupCrossDivision = () => {
+        const section = document.getElementById('cross');
+        if (!section) return;
+
+        const kicker = document.getElementById('cross-kicker');
+        const title = document.getElementById('cross-title');
+        const body = document.getElementById('cross-body');
+        const list = document.getElementById('cross-list');
+        const route = document.getElementById('cross-route');
+        const tools = document.getElementById('cross-tools');
+        const output = document.getElementById('cross-output');
+        const buttons = Array.from(section.querySelectorAll('.cross__selector button'));
+        const pairEls = Array.from(section.querySelectorAll('.cross__pair'));
+
+        const PAIRS = [
+            {
+                kicker: 'RADIO × DRONE',
+                title: '空撮と通信のラインがつながる',
+                body: 'ドローン班の FPV と無線班の知識は、別々の活動ではなく「通信して飛ばす」という一本の線でつながっています。離れた対象と安定してやり取りする感覚は、電研の中でもかなり共有されています。',
+                items: [
+                    'FPV には第四級以上のアマチュア無線資格が必要',
+                    '飛行と通信は切り離せない',
+                    'イベント運用でも無線の視点が活きる',
+                ],
+                route: 'AIR LINK',
+                tools: 'FPV / RF',
+                output: 'COMMS',
+            },
+            {
+                kicker: 'DRONE × MCU / ROBOT',
+                title: '飛ぶ機体も、制御とハードの延長にある',
+                body: 'ドローンは空を飛ぶガジェットである前に、制御、電源、センサ、実装のまとまりでもあります。マイコン・ロボット班の感覚は、飛行体の理解にもかなり近いところがあります。',
+                items: [
+                    'flight controller 的な制御感覚が共通する',
+                    'センサ、配線、電源まわりの理解がそのまま効く',
+                    '市販機の先に自作・改造の視点が生まれる',
+                ],
+                route: 'CTRL BUS',
+                tools: 'SENSOR / PWR',
+                output: 'MOTION',
+            },
+            {
+                kicker: 'MCU / ROBOT × SOFTWARE',
+                title: '動くものを、可視化して、調整して、仕上げる',
+                body: 'ハードが動き始めると、次に必要になるのは UI、ログ、可視化、解析です。マイコン・ロボット班とソフトウェア班の境界は、作っていくほど自然に薄くなっていきます。',
+                items: [
+                    '制御UIや監視画面を作る流れが生まれる',
+                    'ログ取得や解析が改善に直結する',
+                    'ハードとソフトの往復で完成度が上がる',
+                ],
+                route: 'I/O LOOP',
+                tools: 'UI / LOG',
+                output: 'TUNING',
+            },
+            {
+                kicker: 'SOFTWARE × RADIO',
+                title: '通信の理解は、コードでさらに広がる',
+                body: '無線の運用や通信の理解は、ソフトウェア班の視点が入ることで可視化や解析へつながります。見えなかった信号が読めるようになると、活動の幅も一段広がります。',
+                items: [
+                    '通信ログや状態をコードで扱える',
+                    '運用支援や可視化のツールが作れる',
+                    'データ視点で無線を読み直せる',
+                ],
+                route: 'DATA LINK',
+                tools: 'LOG / TOOL',
+                output: 'ANALYSIS',
+            },
+        ];
+
+        let activeIndex = 0;
+        let autoTimer = null;
+        let userLocked = false;
+
+        const render = (index) => {
+            const data = PAIRS[index];
+            if (!data) return;
+            activeIndex = index;
+            kicker.textContent = data.kicker;
+            title.textContent = data.title;
+            body.textContent = data.body;
+            route.textContent = data.route;
+            tools.textContent = data.tools;
+            output.textContent = data.output;
+
+            list.replaceChildren(
+                ...data.items.map((text) => {
+                    const li = document.createElement('li');
+                    li.textContent = text;
+                    return li;
+                })
+            );
+
+            buttons.forEach((button, buttonIndex) => {
+                const isActive = buttonIndex === index;
+                button.classList.toggle('is-active', isActive);
+                button.setAttribute('aria-pressed', String(isActive));
+            });
+
+            pairEls.forEach((pairEl, pairIndex) => {
+                pairEl.classList.toggle('is-active', pairIndex === index);
+            });
+        };
+
+        const stopAuto = () => {
+            if (!autoTimer) return;
+            clearInterval(autoTimer);
+            autoTimer = null;
+        };
+
+        const startAuto = () => {
+            if (userLocked || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            stopAuto();
+            autoTimer = window.setInterval(() => {
+                render((activeIndex + 1) % PAIRS.length);
+            }, 5200);
+        };
+
+        buttons.forEach((button) => {
+            const index = Number(button.dataset.cross);
+            button.addEventListener('click', () => {
+                userLocked = true;
+                stopAuto();
+                render(index);
+            });
+
+            button.addEventListener('mouseenter', () => {
+                if (!window.matchMedia('(hover: hover)').matches) return;
+                render(index);
+            });
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            const [entry] = entries;
+            if (!entry) return;
+            if (entry.isIntersecting) startAuto();
+            else stopAuto();
+        }, { threshold: 0.35 });
+
+        observer.observe(section);
+        render(0);
+        startAuto();
+    };
+
+    setupCrossDivision();
 
     /* ---------- PARTICLE / CIRCUIT BACKGROUND ---------- */
     const canvas = document.getElementById('bg-canvas');
