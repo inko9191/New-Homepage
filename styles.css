@@ -2866,7 +2866,7 @@ canvas {
     }
 
     .joinflow__board {
-        inset: 44% 0 0 0;
+        inset: 46% 0 0 0;
         border-top: 1px solid rgba(0, 229, 255, 0.18);
     }
 
@@ -2880,25 +2880,22 @@ canvas {
     }
 
     .joinflow__overlay {
-        inset: 0 0 42% 0;
+        inset: 0 0 40% 0;
         width: 100%;
         max-width: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 0.6rem;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto minmax(0, 1fr) auto auto auto;
+        gap: 0.55rem;
         padding:
-            calc(4.5rem + env(safe-area-inset-top, 0px))
+            calc(4.2rem + env(safe-area-inset-top, 0px))
             1rem
-            calc(0.8rem + env(safe-area-inset-bottom, 0px));
-        overflow-x: hidden;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        overscroll-behavior: contain;
+            calc(0.85rem + env(safe-area-inset-bottom, 0px));
+        overflow: hidden;
         pointer-events: auto;
     }
 
     .joinflow__head {
-        flex: 0 0 auto;
         align-items: flex-start;
         gap: 0.45rem;
         flex-direction: column;
@@ -2915,9 +2912,13 @@ canvas {
     }
 
     .joinflow__panel {
-        flex: 0 0 auto;
         max-width: none;
         padding: 0.95rem;
+        min-height: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
     }
 
     .joinflow__title {
@@ -2986,8 +2987,6 @@ canvas {
     }
 
     .joinflow__steps {
-        margin-top: auto;
-        flex: 0 0 auto;
         display: flex;
         flex-wrap: nowrap;
         justify-content: space-between;
@@ -3008,7 +3007,6 @@ canvas {
     }
 
     .joinflow__progress-wrap {
-        flex: 0 0 auto;
         display: flex;
         align-items: center;
         gap: 0.6rem;

@@ -5,7 +5,7 @@
 (() => {
     'use strict';
 
-    const APP_VERSION = '20260419-1315';
+    const APP_VERSION = '20260419-1412';
 
     const toAbsolutePageUrl = (rawHref) => {
         if (!rawHref) return rawHref;
@@ -224,14 +224,13 @@
     const yearEl = document.getElementById('year');
     if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-    /* ---------- LIVE STATUS (denken-key-checker) ---------- */
+    /* ---------- LIVE STATUS ---------- */
     // Best-effort: try several endpoints on the upstream app, then parse the
     // response to pick out "open/closed" / "在/不在" signals. If every attempt
     // is blocked (CORS, 404, timeout), the panel falls back to OFFLINE.
     const statusPanel = document.getElementById('status-panel');
     const elSys = document.getElementById('stat-sys');
-    const elKey = document.getElementById('stat-key');
-    const elDoor = document.getElementById('stat-door');
+    const elRoom = document.getElementById('stat-room');
     const elUpdated = document.getElementById('stat-updated');
     const elLive = document.getElementById('panel-live');
 
@@ -311,20 +310,17 @@
             setPanelState('live');
             elLive.textContent = 'LIVE';
             elSys.textContent = 'ONLINE';
-            elKey.textContent = '在室中';
-            elDoor.textContent = 'OPEN';
+            elRoom.textContent = 'OPEN';
         } else if (verdict === 'CLOSED') {
             setPanelState('live');
             elLive.textContent = 'LIVE';
             elSys.textContent = 'ONLINE';
-            elKey.textContent = '持出中';
-            elDoor.textContent = 'CLOSED';
+            elRoom.textContent = 'CLOSED';
         } else {
             setPanelState('offline');
             elLive.textContent = 'UNAVAILABLE';
             elSys.textContent = 'ONLINE';
-            elKey.textContent = '—';
-            elDoor.textContent = '—';
+            elRoom.textContent = '—';
         }
         elUpdated.textContent = fmtTime(now);
     };
@@ -333,8 +329,7 @@
         setPanelState('offline');
         elLive.textContent = 'OFFLINE';
         elSys.textContent = 'UNREACHABLE';
-        elKey.textContent = '—';
-        elDoor.textContent = '—';
+        elRoom.textContent = '—';
         elUpdated.textContent = fmtTime(new Date());
     };
 
@@ -365,6 +360,8 @@
         const title = document.getElementById('joinflow-title');
         const body = document.getElementById('joinflow-body');
         const list = document.getElementById('joinflow-list');
+        const panel = track.querySelector('.joinflow__panel');
+        const overlay = track.querySelector('.joinflow__overlay');
         const primary = document.getElementById('joinflow-primary');
         const primaryLabel = document.getElementById('joinflow-primary-label');
         const secondary = document.getElementById('joinflow-secondary');
@@ -497,6 +494,12 @@
                     return li;
                 })
             );
+
+            // On mobile, the JOIN copy area is internally scrollable.
+            // Reset its scroll position whenever the step changes so
+            // re-entering the section from below doesn't keep a stale offset.
+            if (panel) panel.scrollTop = 0;
+            if (overlay) overlay.scrollTop = 0;
         };
 
         const update = () => {
