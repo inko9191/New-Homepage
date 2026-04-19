@@ -16,9 +16,9 @@
     <link
         href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500;700&amp;family=Orbitron:wght@500;700;900&amp;family=Noto+Sans+JP:wght@300;500;700&amp;display=swap"
         rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260418-2385" />
+    <link rel="stylesheet" href="styles.css?v=20260419-0012" />
     <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js" defer></script>
-    <script src="script.js?v=20260418-2385" defer></script>
+    <script src="script.js?v=20260419-0012" defer></script>
     <script src="pcb3d.js?v=20260418-2385" defer></script>
 </head>
 
@@ -528,32 +528,233 @@
                     <span class="section__sub">見学・参加について</span>
                 </div>
 
-                <div class="join">
-                    <article class="join__panel reveal">
-                        <p class="join__eyebrow">WELCOME</p>
-                        <h3 class="join__title">はんだごても、無線機も、コードも。<br />最初は触ってみるところから。</h3>
-                        <p class="join__copy">
-                            初心者歓迎。専門知識がなくても、部室の道具と先輩のサポートで少しずつ進められます。
-                            興味のある班から入って、あとから横断していくのも大歓迎です。
-                        </p>
-                        <ul class="join__chips" aria-label="entry points">
-                            <li>初心者歓迎</li>
-                            <li>学部・学科不問</li>
-                            <li>見学だけでもOK</li>
-                            <li>制作持ち込み歓迎</li>
-                        </ul>
-                        <div class="join__actions">
-                            <a href="#divisions" class="btn btn--primary">
-                                <span>SEE DIVISIONS</span>
-                                <svg viewBox="0 0 24 24" aria-hidden="true">
-                                    <path d="M4 12h14M12 5l7 7-7 7" fill="none" stroke="currentColor"
-                                        stroke-width="2" />
-                                </svg>
-                            </a>
-                            <a href="#contact" class="btn btn--ghost"><span>// CONTACT INFO</span></a>
-                        </div>
-                    </article>
+                <div class="joinflow__track" id="joinflow-track">
+                    <div class="joinflow__sticky">
+                        <div class="joinflow__board" aria-hidden="true">
+                            <svg class="joinflow__svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+                                <defs>
+                                    <linearGradient id="join-board-fill" x1="0" y1="0" x2="1" y2="1">
+                                        <stop offset="0%" stop-color="#07111d" />
+                                        <stop offset="52%" stop-color="#091523" />
+                                        <stop offset="100%" stop-color="#050a12" />
+                                    </linearGradient>
+                                    <linearGradient id="join-trace-grad" x1="0" y1="0" x2="1" y2="0">
+                                        <stop offset="0%" stop-color="#00e5ff" />
+                                        <stop offset="58%" stop-color="#9cf5ff" />
+                                        <stop offset="100%" stop-color="#b400ff" />
+                                    </linearGradient>
+                                    <filter id="join-glow" x="-50%" y="-50%" width="200%" height="200%">
+                                        <feGaussianBlur stdDeviation="4" result="blur" />
+                                        <feMerge>
+                                            <feMergeNode in="blur" />
+                                            <feMergeNode in="SourceGraphic" />
+                                        </feMerge>
+                                    </filter>
+                                    <filter id="join-glow-soft" x="-50%" y="-50%" width="200%" height="200%">
+                                        <feGaussianBlur stdDeviation="10" result="blur" />
+                                        <feMerge>
+                                            <feMergeNode in="blur" />
+                                            <feMergeNode in="SourceGraphic" />
+                                        </feMerge>
+                                    </filter>
+                                </defs>
 
+                                <rect x="44" y="44" width="1512" height="812" rx="34" fill="url(#join-board-fill)" />
+
+                                <g class="joinflow__base">
+                                    <rect class="joinflow__bezel" x="78" y="78" width="1444" height="744" rx="28" />
+                                    <rect class="joinflow__chip" x="610" y="280" width="380" height="248" rx="24" />
+                                    <rect class="joinflow__bank" x="110" y="144" width="196" height="86" rx="16" />
+                                    <rect class="joinflow__bank" x="1240" y="138" width="214" height="92" rx="16" />
+                                    <rect class="joinflow__bank" x="1208" y="624" width="246" height="98" rx="16" />
+                                    <rect class="joinflow__bank" x="124" y="620" width="236" height="102" rx="16" />
+                                    <rect class="joinflow__bank joinflow__bank--mid" x="1048" y="374" width="208" height="94" rx="18" />
+                                    <rect class="joinflow__bank joinflow__bank--mid" x="324" y="384" width="210" height="94" rx="18" />
+
+                                    <path class="joinflow__trace joinflow__trace--wide" d="M112 188 H438 V332 H610" />
+                                    <path class="joinflow__trace joinflow__trace--wide" d="M306 672 H470 V592 H610" />
+                                    <path class="joinflow__trace joinflow__trace--wide" d="M990 332 H1148 V184 H1240" />
+                                    <path class="joinflow__trace joinflow__trace--wide" d="M990 468 H1140 V674 H1208" />
+                                    <path class="joinflow__trace joinflow__trace--thin" d="M182 230 V312 H268 V420 H324" />
+                                    <path class="joinflow__trace joinflow__trace--thin" d="M1364 230 V332 H1256 V420" />
+                                    <path class="joinflow__trace joinflow__trace--thin" d="M242 620 V564 H436 V470" />
+                                    <path class="joinflow__trace joinflow__trace--thin" d="M1332 624 V572 H1194 V470" />
+                                    <path class="joinflow__trace joinflow__trace--thin" d="M534 430 H610" />
+                                    <path class="joinflow__trace joinflow__trace--thin" d="M990 430 H1048" />
+                                    <path class="joinflow__trace joinflow__trace--thin" d="M530 236 H560 V144 H752" />
+                                    <path class="joinflow__trace joinflow__trace--thin" d="M1064 236 H1122 V144 H1360" />
+                                    <path class="joinflow__trace joinflow__trace--thin" d="M292 518 H504 V562 H818" />
+                                    <path class="joinflow__trace joinflow__trace--thin" d="M1010 562 H1130 V518 H1336" />
+                                    <path class="joinflow__trace joinflow__trace--thin" d="M770 528 V618 H944" />
+                                    <path class="joinflow__trace joinflow__trace--thin" d="M830 280 V172 H1064" />
+                                    <path class="joinflow__trace joinflow__trace--thin" d="M758 172 H522 V240" />
+                                    <path class="joinflow__trace joinflow__trace--thin" d="M942 618 H1088 V550 H1336" />
+
+                                    <g class="joinflow__pads">
+                                        <rect class="joinflow__pad" x="652" y="244" width="20" height="30" rx="4" />
+                                        <rect class="joinflow__pad" x="690" y="244" width="20" height="30" rx="4" />
+                                        <rect class="joinflow__pad" x="728" y="244" width="20" height="30" rx="4" />
+                                        <rect class="joinflow__pad" x="766" y="244" width="20" height="30" rx="4" />
+                                        <rect class="joinflow__pad" x="804" y="244" width="20" height="30" rx="4" />
+                                        <rect class="joinflow__pad" x="842" y="244" width="20" height="30" rx="4" />
+                                        <rect class="joinflow__pad" x="880" y="244" width="20" height="30" rx="4" />
+                                        <rect class="joinflow__pad" x="918" y="244" width="20" height="30" rx="4" />
+                                        <rect class="joinflow__pad" x="652" y="534" width="20" height="30" rx="4" />
+                                        <rect class="joinflow__pad" x="690" y="534" width="20" height="30" rx="4" />
+                                        <rect class="joinflow__pad" x="728" y="534" width="20" height="30" rx="4" />
+                                        <rect class="joinflow__pad" x="766" y="534" width="20" height="30" rx="4" />
+                                        <rect class="joinflow__pad" x="804" y="534" width="20" height="30" rx="4" />
+                                        <rect class="joinflow__pad" x="842" y="534" width="20" height="30" rx="4" />
+                                        <rect class="joinflow__pad" x="880" y="534" width="20" height="30" rx="4" />
+                                        <rect class="joinflow__pad" x="918" y="534" width="20" height="30" rx="4" />
+                                    </g>
+
+                                    <g class="joinflow__vias">
+                                        <circle class="joinflow__via" cx="438" cy="332" r="6" />
+                                        <circle class="joinflow__via" cx="470" cy="592" r="6" />
+                                        <circle class="joinflow__via" cx="1148" cy="184" r="6" />
+                                        <circle class="joinflow__via" cx="1140" cy="674" r="6" />
+                                        <circle class="joinflow__via" cx="268" cy="420" r="5" />
+                                        <circle class="joinflow__via" cx="1256" cy="420" r="5" />
+                                        <circle class="joinflow__via" cx="504" cy="562" r="5" />
+                                        <circle class="joinflow__via" cx="1130" cy="518" r="5" />
+                                        <circle class="joinflow__via" cx="770" cy="618" r="5" />
+                                        <circle class="joinflow__via" cx="830" cy="172" r="5" />
+                                    </g>
+
+                                    <g class="joinflow__silk">
+                                        <text x="124" y="130">ENTRY CONN</text>
+                                        <text x="1260" y="126">DRONE NODE</text>
+                                        <text x="1230" y="612">SOFT NODE</text>
+                                        <text x="144" y="606">ROBOT NODE</text>
+                                        <text x="344" y="370">ROOM BUS</text>
+                                        <text x="1066" y="360">LAB BENCH</text>
+                                        <text x="706" y="406">JOIN FLOW CTRL</text>
+                                        <text class="joinflow__silk-minor" x="708" y="432">ROUTE / ACCESS / BUILD</text>
+                                        <text class="joinflow__silk-minor" x="180" y="210">TP-01</text>
+                                        <text class="joinflow__silk-minor" x="1326" y="208">TP-09</text>
+                                        <text class="joinflow__silk-minor" x="278" y="690">J-BUS A</text>
+                                        <text class="joinflow__silk-minor" x="1122" y="700">J-BUS B</text>
+                                        <text class="joinflow__silk-minor" x="1048" y="458">TOOL RACK</text>
+                                        <text class="joinflow__silk-minor" x="372" y="458">ROOM ACCESS</text>
+                                    </g>
+                                </g>
+
+                                <g class="joinflow__route joinflow__route--0 is-live is-current" data-route="0">
+                                    <path class="joinflow__signal" d="M112 188 H438 V332 H610" />
+                                    <path class="joinflow__signal joinflow__signal--thin" d="M438 332 H520 V236 H610" />
+                                    <circle class="joinflow__signal-node" cx="112" cy="188" r="7" />
+                                    <circle class="joinflow__signal-node" cx="438" cy="332" r="6" />
+                                    <circle class="joinflow__signal-node" cx="610" cy="332" r="7" />
+                                </g>
+
+                                <g class="joinflow__route joinflow__route--1" data-route="1">
+                                    <path class="joinflow__signal" d="M182 230 V312 H268 V420 H324" />
+                                    <path class="joinflow__signal joinflow__signal--thin" d="M324 420 H534" />
+                                    <circle class="joinflow__signal-node" cx="182" cy="230" r="6" />
+                                    <circle class="joinflow__signal-node" cx="268" cy="420" r="6" />
+                                    <circle class="joinflow__signal-node" cx="534" cy="420" r="6" />
+                                </g>
+
+                                <g class="joinflow__route joinflow__route--2" data-route="2">
+                                    <path class="joinflow__signal" d="M990 430 H1048" />
+                                    <path class="joinflow__signal joinflow__signal--thin" d="M1048 430 H1256 V420" />
+                                    <path class="joinflow__signal joinflow__signal--thin" d="M1048 430 V550 H1130 V518 H1336" />
+                                    <circle class="joinflow__signal-node" cx="1048" cy="430" r="7" />
+                                    <circle class="joinflow__signal-node" cx="1256" cy="420" r="6" />
+                                    <circle class="joinflow__signal-node" cx="1130" cy="518" r="6" />
+                                    <circle class="joinflow__signal-node" cx="1336" cy="518" r="6" />
+                                </g>
+
+                                <g class="joinflow__route joinflow__route--3" data-route="3">
+                                    <path class="joinflow__signal" d="M306 672 H470 V592 H610" />
+                                    <path class="joinflow__signal" d="M990 332 H1148 V184 H1240" />
+                                    <path class="joinflow__signal" d="M990 468 H1140 V674 H1208" />
+                                    <path class="joinflow__signal joinflow__signal--thin" d="M610 430 H534" />
+                                    <circle class="joinflow__signal-node" cx="306" cy="672" r="7" />
+                                    <circle class="joinflow__signal-node" cx="1240" cy="184" r="7" />
+                                    <circle class="joinflow__signal-node" cx="1208" cy="674" r="7" />
+                                    <circle class="joinflow__signal-node" cx="610" cy="430" r="6" />
+                                </g>
+
+                                <g class="joinflow__route joinflow__route--4" data-route="4">
+                                    <path class="joinflow__signal" d="M522 240 H758 V172 H1064" />
+                                    <path class="joinflow__signal" d="M770 528 V618 H944 V562 H1010" />
+                                    <path class="joinflow__signal joinflow__signal--thin" d="M758 172 H1122 V144 H1360" />
+                                    <path class="joinflow__signal joinflow__signal--thin" d="M292 518 H504 V562 H818" />
+                                    <circle class="joinflow__signal-node" cx="758" cy="172" r="6" />
+                                    <circle class="joinflow__signal-node" cx="944" cy="562" r="6" />
+                                    <circle class="joinflow__signal-node" cx="1360" cy="144" r="7" />
+                                    <circle class="joinflow__signal-node" cx="292" cy="518" r="6" />
+                                </g>
+                            </svg>
+                        </div>
+
+                        <div class="joinflow__overlay">
+                            <div class="joinflow__head">
+                                <p class="joinflow__eyebrow" id="joinflow-kicker">ENTRY LINE // STEP 01</p>
+                                <span class="joinflow__badge" id="joinflow-badge">DISCOVER</span>
+                            </div>
+
+                            <article class="joinflow__panel" aria-live="polite">
+                                <h3 class="joinflow__title" id="joinflow-title">存在を知るところから始まる</h3>
+                                <p class="joinflow__body" id="joinflow-body">
+                                    新歓、作品展示、上の DIVISIONS から、まずは電研が何を作っているのかを知る段階。
+                                    最初は「この班ちょっと気になる」くらいで十分です。
+                                </p>
+                                <ul class="joinflow__list" id="joinflow-list">
+                                    <li>班紹介ページで雰囲気を見る</li>
+                                    <li>気になる領域をひとつ見つける</li>
+                                    <li>初心者歓迎なので予備知識は不要</li>
+                                </ul>
+                                <div class="joinflow__actions">
+                                    <a href="#divisions" class="btn btn--primary" id="joinflow-primary">
+                                        <span id="joinflow-primary-label">SEE DIVISIONS</span>
+                                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                                            <path d="M4 12h14M12 5l7 7-7 7" fill="none" stroke="currentColor"
+                                                stroke-width="2" />
+                                        </svg>
+                                    </a>
+                                    <a href="#contact" class="btn btn--ghost" id="joinflow-secondary">
+                                        <span id="joinflow-secondary-label">// CONTACT INFO</span>
+                                    </a>
+                                </div>
+                            </article>
+
+                            <div class="joinflow__meta" aria-hidden="true">
+                                <div class="joinflow__meta-card">
+                                    <span>ROUTE</span>
+                                    <strong id="joinflow-meta-route">SCAN</strong>
+                                </div>
+                                <div class="joinflow__meta-card">
+                                    <span>MODE</span>
+                                    <strong id="joinflow-meta-mode">PASSIVE</strong>
+                                </div>
+                                <div class="joinflow__meta-card">
+                                    <span>OUTPUT</span>
+                                    <strong id="joinflow-meta-output">FIRST CONTACT</strong>
+                                </div>
+                            </div>
+
+                            <ol class="joinflow__steps" aria-hidden="true">
+                                <li data-step="0" class="is-active is-current"><em>01</em> DISCOVER</li>
+                                <li data-step="1"><em>02</em> ENTER</li>
+                                <li data-step="2"><em>03</em> TOUCH</li>
+                                <li data-step="3"><em>04</em> ROUTE</li>
+                                <li data-step="4"><em>05</em> BUILD</li>
+                            </ol>
+
+                            <div class="joinflow__progress-wrap">
+                                <div class="joinflow__progress">
+                                    <div class="joinflow__progress-fill" id="joinflow-pf"></div>
+                                </div>
+                                <div class="joinflow__pct"><span id="joinflow-pct">0</span>%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="join__support">
                     <article class="status-panel reveal" id="status-panel" data-state="loading">
                         <div class="status-panel__top">
                             <span class="status-panel__label">ROOM STATUS</span>
@@ -576,6 +777,12 @@
                             rel="noopener noreferrer">
                             source: denken-key-checker ↗
                         </a>
+                    </article>
+
+                    <article class="contact__card join__support-card reveal">
+                        <p class="contact__kicker">ENTRY NOTES</p>
+                        <h3>見学から制作開始まで、段階的に入れます</h3>
+                        <p>最初から専門知識がなくても大丈夫。気になる班を見る、部室に来る、触ってみる、班を選ぶ、という順番で自然に入っていける導線を想定しています。</p>
                     </article>
                 </div>
 

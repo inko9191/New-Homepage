@@ -5,7 +5,7 @@
 (() => {
     'use strict';
 
-    const APP_VERSION = '20260418-2385';
+    const APP_VERSION = '20260419-0012';
 
     const toAbsolutePageUrl = (rawHref) => {
         if (!rawHref) return rawHref;
@@ -354,6 +354,191 @@
     // Initial query shortly after the loader finishes, then refresh every 60s.
     setTimeout(runStatusCheck, 1500);
     setInterval(runStatusCheck, 60_000);
+
+    /* ---------- JOIN FLOW ---------- */
+    const setupJoinFlow = () => {
+        const track = document.getElementById('joinflow-track');
+        if (!track) return;
+
+        const kicker = document.getElementById('joinflow-kicker');
+        const badge = document.getElementById('joinflow-badge');
+        const title = document.getElementById('joinflow-title');
+        const body = document.getElementById('joinflow-body');
+        const list = document.getElementById('joinflow-list');
+        const primary = document.getElementById('joinflow-primary');
+        const primaryLabel = document.getElementById('joinflow-primary-label');
+        const secondary = document.getElementById('joinflow-secondary');
+        const secondaryLabel = document.getElementById('joinflow-secondary-label');
+        const metaRoute = document.getElementById('joinflow-meta-route');
+        const metaMode = document.getElementById('joinflow-meta-mode');
+        const metaOutput = document.getElementById('joinflow-meta-output');
+        const progressFill = document.getElementById('joinflow-pf');
+        const progressPct = document.getElementById('joinflow-pct');
+        const stepEls = Array.from(track.querySelectorAll('.joinflow__steps li'));
+        const routeEls = Array.from(track.querySelectorAll('.joinflow__route'));
+
+        const FLOW = [
+            {
+                kicker: 'ENTRY LINE // STEP 01',
+                badge: 'DISCOVER',
+                title: '存在を知るところから始まる',
+                body: '新歓、作品展示、上の DIVISIONS から、まずは電研が何を作っているのかを知る段階。最初は「この班ちょっと気になる」くらいで十分です。',
+                items: [
+                    '班紹介ページで雰囲気を見る',
+                    '気になる領域をひとつ見つける',
+                    '初心者歓迎なので予備知識は不要',
+                ],
+                metaRoute: 'SCAN',
+                metaMode: 'PASSIVE',
+                metaOutput: 'FIRST CONTACT',
+                primaryHref: '#divisions',
+                primaryLabel: 'SEE DIVISIONS',
+                secondaryHref: '#contact',
+                secondaryLabel: '// CONTACT INFO',
+            },
+            {
+                kicker: 'ENTRY LINE // STEP 02',
+                badge: 'ENTER',
+                title: '次は、部室に来て空気を掴む',
+                body: '実際の参加は、いきなり制作に入るよりも、まず部室や展示で雰囲気を掴むところから。どんな人がいて、どんな道具が並んでいるかを見る段階です。',
+                items: [
+                    '見学だけでも問題なし',
+                    '後楽園キャンパスを拠点に活動',
+                    '部室の雰囲気と人を見る',
+                ],
+                metaRoute: 'ACCESS',
+                metaMode: 'ONSITE',
+                metaOutput: 'ROOM OPEN',
+                primaryHref: '#status-panel',
+                primaryLabel: 'ROOM STATUS',
+                secondaryHref: '#contact',
+                secondaryLabel: '// HOW TO JOIN',
+            },
+            {
+                kicker: 'ENTRY LINE // STEP 03',
+                badge: 'TOUCH',
+                title: '触ってみると、急に距離が縮む',
+                body: 'はんだごて、無線機、FPV、コード、先輩の作品。実際に触ることで、自分がどこに惹かれるかがはっきりしてきます。',
+                items: [
+                    '工具や作品に触れてみる',
+                    '先輩に質問しながら試せる',
+                    '制作持ち込みも歓迎',
+                ],
+                metaRoute: 'BENCH',
+                metaMode: 'HANDS-ON',
+                metaOutput: 'SKILL TOUCH',
+                primaryHref: '#assembly',
+                primaryLabel: 'SEE ASSEMBLY',
+                secondaryHref: '#contact',
+                secondaryLabel: '// TALK TO US',
+            },
+            {
+                kicker: 'ENTRY LINE // STEP 04',
+                badge: 'ROUTE',
+                title: '1班に入っても、あとから横断できる',
+                body: '無線、ドローン、マイコン・ロボット、ソフトウェア。入口はひとつで大丈夫ですが、活動しながら他班へ広げていけるのが電研らしさです。',
+                items: [
+                    '最初は一番気になる班からで OK',
+                    '活動しながら他班へ横断できる',
+                    'ハードとソフトを混ぜやすい',
+                ],
+                metaRoute: 'BRANCH',
+                metaMode: 'CROSS',
+                metaOutput: 'DIVISION LINK',
+                primaryHref: '#divisions',
+                primaryLabel: 'PICK A DIVISION',
+                secondaryHref: '#contact',
+                secondaryLabel: '// ASK ANYTHING',
+            },
+            {
+                kicker: 'ENTRY LINE // STEP 05',
+                badge: 'BUILD',
+                title: '最後は、自分の制作ラインが動き始める',
+                body: '班を見て、部室に来て、触って、選んだ先にあるのは、自分の制作が始まる状態です。ここから先は、電研の道具と人が後押しします。',
+                items: [
+                    '見学から制作開始まで段階的に入れる',
+                    '初心者でも最初の作品を作り始められる',
+                    '作品が次の班や次の後輩につながっていく',
+                ],
+                metaRoute: 'BOOT',
+                metaMode: 'ACTIVE',
+                metaOutput: 'MAKE SOMETHING',
+                primaryHref: '#contact',
+                primaryLabel: 'JOIN / CONTACT',
+                secondaryHref: '#status-panel',
+                secondaryLabel: '// CHECK ROOM',
+            },
+        ];
+
+        const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+        let currentIndex = -1;
+
+        const renderStep = (index) => {
+            const data = FLOW[index];
+            if (!data || index === currentIndex) return;
+            currentIndex = index;
+
+            kicker.textContent = data.kicker;
+            badge.textContent = data.badge;
+            title.textContent = data.title;
+            body.textContent = data.body;
+            metaRoute.textContent = data.metaRoute;
+            metaMode.textContent = data.metaMode;
+            metaOutput.textContent = data.metaOutput;
+            primary.href = data.primaryHref;
+            primaryLabel.textContent = data.primaryLabel;
+            secondary.href = data.secondaryHref;
+            secondaryLabel.textContent = data.secondaryLabel;
+
+            list.replaceChildren(
+                ...data.items.map((text) => {
+                    const li = document.createElement('li');
+                    li.textContent = text;
+                    return li;
+                })
+            );
+        };
+
+        const update = () => {
+            const rect = track.getBoundingClientRect();
+            const viewH = window.innerHeight;
+            const travel = track.offsetHeight - viewH;
+            const progress = clamp(-rect.top / Math.max(1, travel), 0, 1);
+            const index = Math.min(FLOW.length - 1, Math.floor(progress * FLOW.length));
+
+            renderStep(index);
+
+            if (progressFill) progressFill.style.width = `${(progress * 100).toFixed(1)}%`;
+            if (progressPct) progressPct.textContent = String(Math.floor(progress * 100));
+
+            stepEls.forEach((stepEl, stepIndex) => {
+                stepEl.classList.toggle('is-active', stepIndex <= index);
+                stepEl.classList.toggle('is-current', stepIndex === index);
+            });
+
+            routeEls.forEach((routeEl, routeIndex) => {
+                routeEl.classList.toggle('is-live', routeIndex <= index);
+                routeEl.classList.toggle('is-current', routeIndex === index);
+            });
+        };
+
+        let ticking = false;
+        const requestUpdate = () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(() => {
+                ticking = false;
+                update();
+            });
+        };
+
+        renderStep(0);
+        update();
+        window.addEventListener('scroll', requestUpdate, { passive: true });
+        window.addEventListener('resize', requestUpdate);
+    };
+
+    setupJoinFlow();
 
     /* ---------- PARTICLE / CIRCUIT BACKGROUND ---------- */
     const canvas = document.getElementById('bg-canvas');

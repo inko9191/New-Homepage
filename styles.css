@@ -1509,14 +1509,190 @@ canvas {
    JOIN / CONTACT
    ============================================================ */
 
-.join {
-    display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
-    gap: 1.4rem;
-    align-items: stretch;
+.joinflow__track {
+    position: relative;
+    height: 320vh;
 }
 
-.join__panel,
+.joinflow__sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background:
+        linear-gradient(135deg, rgba(6, 10, 18, 0.98), rgba(4, 8, 14, 0.96));
+}
+
+.joinflow__board {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.joinflow__svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.joinflow__base .joinflow__bezel {
+    fill: none;
+    stroke: rgba(126, 160, 178, 0.22);
+    stroke-width: 1.4;
+}
+
+.joinflow__base .joinflow__chip {
+    fill: rgba(7, 13, 22, 0.78);
+    stroke: rgba(132, 168, 188, 0.26);
+    stroke-width: 1.8;
+}
+
+.joinflow__base .joinflow__bank {
+    fill: rgba(8, 15, 26, 0.55);
+    stroke: rgba(118, 150, 170, 0.24);
+    stroke-width: 1.5;
+}
+
+.joinflow__base .joinflow__bank--mid {
+    fill: rgba(8, 15, 26, 0.4);
+}
+
+.joinflow__base .joinflow__trace,
+.joinflow__base .joinflow__trace--thin,
+.joinflow__base .joinflow__trace--wide {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+}
+
+.joinflow__base .joinflow__trace {
+    stroke: rgba(126, 164, 184, 0.2);
+    stroke-width: 3;
+}
+
+.joinflow__base .joinflow__trace--thin {
+    stroke: rgba(126, 164, 184, 0.17);
+    stroke-width: 1.8;
+}
+
+.joinflow__base .joinflow__trace--wide {
+    stroke: rgba(126, 164, 184, 0.11);
+    stroke-width: 7;
+}
+
+.joinflow__base .joinflow__pad {
+    fill: rgba(9, 18, 28, 0.78);
+    stroke: rgba(132, 172, 190, 0.24);
+    stroke-width: 1.1;
+}
+
+.joinflow__base .joinflow__via {
+    fill: rgba(126, 164, 184, 0.2);
+}
+
+.joinflow__silk {
+    fill: rgba(221, 242, 255, 0.42);
+    font-family: var(--font-mono);
+    font-size: 15px;
+    letter-spacing: 0.22em;
+}
+
+.joinflow__silk-minor {
+    fill: rgba(167, 196, 214, 0.34);
+    font-size: 12px;
+}
+
+.joinflow__route {
+    opacity: 0;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.joinflow__route .joinflow__signal {
+    fill: none;
+    stroke: url(#join-trace-grad);
+    stroke-width: 4.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 22 13;
+    vector-effect: non-scaling-stroke;
+    filter: url(#join-glow);
+}
+
+.joinflow__route .joinflow__signal--thin {
+    stroke-width: 2.6;
+    stroke-dasharray: 14 10;
+}
+
+.joinflow__route .joinflow__signal-node {
+    fill: #a6f6ff;
+    filter: url(#join-glow-soft);
+}
+
+.joinflow__route.is-live {
+    opacity: 0.42;
+}
+
+.joinflow__route.is-current {
+    opacity: 1;
+}
+
+.joinflow__route.is-live .joinflow__signal {
+    animation: routeDrift 9s linear infinite;
+}
+
+.joinflow__route.is-current .joinflow__signal-node {
+    animation: signalPulse 1.9s ease-in-out infinite;
+}
+
+.joinflow__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    width: min(1440px, 100%);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(320px, 440px) 1fr minmax(190px, 240px);
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+        "head . meta"
+        "panel . steps"
+        "panel . progress";
+    gap: 1.2rem;
+    padding: clamp(2rem, 5vw, 4rem);
+    pointer-events: none;
+}
+
+.joinflow__head {
+    grid-area: head;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    align-self: start;
+}
+
+.joinflow__eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.28em;
+    color: var(--cyan);
+}
+
+.joinflow__badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.6rem;
+    border: 1px solid rgba(0, 229, 255, 0.2);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    color: var(--ink);
+    background: rgba(0, 229, 255, 0.08);
+}
+
+.joinflow__panel,
+.joinflow__meta-card,
 .status-panel,
 .contact__card {
     position: relative;
@@ -1525,11 +1701,16 @@ canvas {
     background: linear-gradient(180deg, rgba(10, 15, 30, 0.88), rgba(5, 8, 16, 0.94));
 }
 
-.join__panel {
-    padding: 2.2rem;
+.joinflow__panel {
+    grid-area: panel;
+    align-self: start;
+    max-width: 440px;
+    padding: 1.35rem 1.35rem 1.25rem;
+    pointer-events: auto;
 }
 
-.join__panel::before,
+.joinflow__panel::before,
+.joinflow__meta-card::before,
 .status-panel::before,
 .contact__card::before {
     content: "";
@@ -1539,7 +1720,6 @@ canvas {
     background: radial-gradient(circle at top right, rgba(0, 229, 255, 0.12), transparent 52%);
 }
 
-.join__eyebrow,
 .contact__kicker,
 .status-panel__label {
     display: inline-block;
@@ -1549,39 +1729,168 @@ canvas {
     color: var(--cyan);
 }
 
-.join__title {
-    margin-top: 0.6rem;
-    font-size: clamp(1.6rem, 3.2vw, 2.4rem);
-    line-height: 1.2;
+.joinflow__title {
+    margin-top: 0.05rem;
+    font-size: clamp(1.7rem, 3vw, 2.65rem);
+    line-height: 1.14;
 }
 
-.join__copy {
-    margin-top: 1rem;
+.joinflow__body {
+    margin-top: 0.75rem;
     color: var(--ink-dim);
+    font-size: 0.96rem;
+    line-height: 1.78;
 }
 
-.join__chips {
-    display: flex;
-    flex-wrap: wrap;
+.joinflow__list {
+    display: grid;
     gap: 0.55rem;
-    margin-top: 1.4rem;
+    margin-top: 1rem;
     list-style: none;
 }
 
-.join__chips li {
-    padding: 0.35rem 0.6rem;
-    border: 1px solid var(--line);
+.joinflow__list li {
+    position: relative;
+    padding-left: 1rem;
+    color: var(--ink);
+    font-size: 0.86rem;
+}
+
+.joinflow__list li::before {
+    content: "";
+    position: absolute;
+    top: 0.72em;
+    left: 0;
+    width: 0.38rem;
+    height: 1px;
+    background: var(--cyan);
+}
+
+.joinflow__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    margin-top: 1.15rem;
+}
+
+.joinflow__actions .btn {
+    pointer-events: auto;
+}
+
+.joinflow__meta {
+    grid-area: meta;
+    align-self: start;
+    display: grid;
+    gap: 0.8rem;
+}
+
+.joinflow__meta-card {
+    min-height: 92px;
+    padding: 0.85rem 0.95rem;
+}
+
+.joinflow__meta-card span {
+    display: block;
     font-family: var(--font-mono);
-    font-size: 0.68rem;
-    letter-spacing: 0.16em;
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
     color: var(--ink-dim);
 }
 
-.join__actions {
+.joinflow__meta-card strong {
+    display: block;
+    margin-top: 0.45rem;
+    font-family: var(--font-dis);
+    font-size: 0.92rem;
+    letter-spacing: 0.18em;
+    color: var(--ink);
+}
+
+.joinflow__steps {
+    grid-area: steps;
+    align-self: end;
+    display: grid;
+    gap: 0.7rem;
+    padding-left: 1rem;
+    border-left: 1px solid var(--line);
+    list-style: none;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+}
+
+.joinflow__steps li {
     display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 2rem;
+    align-items: center;
+    gap: 0.65rem;
+    opacity: 0.3;
+    color: var(--ink-dim);
+    transition: opacity 0.25s ease, color 0.25s ease;
+}
+
+.joinflow__steps li em {
+    min-width: 2ch;
+    font-style: normal;
+    font-weight: 700;
+    color: var(--cyan);
+}
+
+.joinflow__steps li.is-active {
+    opacity: 0.72;
+}
+
+.joinflow__steps li.is-current {
+    opacity: 1;
+    color: var(--ink);
+}
+
+.joinflow__steps li.is-current em {
+    color: var(--magenta);
+}
+
+.joinflow__progress-wrap {
+    grid-area: progress;
+    justify-self: end;
+    align-self: end;
+    display: grid;
+    gap: 0.65rem;
+}
+
+.joinflow__progress {
+    position: relative;
+    width: min(320px, 34vw);
+    height: 3px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.joinflow__progress-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--grad);
+    box-shadow: 0 0 14px var(--cyan);
+}
+
+.joinflow__pct {
+    justify-self: end;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.3em;
+    color: var(--cyan);
+}
+
+.join__support {
+    display: grid;
+    grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+    gap: 1.4rem;
+    margin-top: 1.4rem;
+    align-items: stretch;
+}
+
+.join__support-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .status-panel {
@@ -1898,6 +2207,25 @@ canvas {
     }
 }
 
+@keyframes routeDrift {
+    to {
+        stroke-dashoffset: -70;
+    }
+}
+
+@keyframes signalPulse {
+    0%,
+    100% {
+        opacity: 0.72;
+        transform: scale(0.94);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.14);
+    }
+}
+
 @keyframes scrollHint {
     0%,
     100% {
@@ -1920,7 +2248,7 @@ canvas {
         width: 55%;
     }
 
-    .join {
+    .join__support {
         grid-template-columns: 1fr;
     }
 
@@ -1930,6 +2258,10 @@ canvas {
 
     .assembly__overlay {
         grid-template-columns: minmax(240px, 320px) 1fr minmax(180px, 240px);
+    }
+
+    .joinflow__overlay {
+        grid-template-columns: minmax(280px, 400px) 1fr minmax(170px, 220px);
     }
 }
 
@@ -2179,23 +2511,178 @@ canvas {
         font-size: 0.9rem;
     }
 
-    .join__panel,
+    .joinflow__track {
+        height: 300vh;
+    }
+
+    .joinflow__sticky {
+        height: 100svh;
+        min-height: 540px;
+        overflow: hidden;
+        background:
+            linear-gradient(180deg,
+                rgba(4, 8, 14, 0.98) 0%,
+                rgba(4, 8, 14, 0.96) 58%,
+                rgba(6, 14, 24, 0.94) 58%,
+                rgba(6, 14, 24, 0.98) 100%);
+    }
+
+    .joinflow__board {
+        inset: 44% 0 0 0;
+        border-top: 1px solid rgba(0, 229, 255, 0.18);
+    }
+
+    .joinflow__svg {
+        transform: scale(1.08);
+        transform-origin: center top;
+    }
+
+    .joinflow__silk-minor {
+        display: none;
+    }
+
+    .joinflow__overlay {
+        inset: 0 0 42% 0;
+        width: 100%;
+        max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        padding:
+            calc(4.5rem + env(safe-area-inset-top, 0px))
+            1rem
+            calc(0.8rem + env(safe-area-inset-bottom, 0px));
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        pointer-events: auto;
+    }
+
+    .joinflow__head {
+        flex: 0 0 auto;
+        align-items: flex-start;
+        gap: 0.45rem;
+        flex-direction: column;
+    }
+
+    .joinflow__eyebrow {
+        font-size: 0.62rem;
+        letter-spacing: 0.18em;
+    }
+
+    .joinflow__badge {
+        font-size: 0.54rem;
+        letter-spacing: 0.18em;
+    }
+
+    .joinflow__panel,
     .status-panel,
     .contact__card {
         padding: 1.25rem;
     }
 
-    .join__title {
-        font-size: 1.45rem;
+    .joinflow__panel {
+        flex: 0 0 auto;
+        max-width: none;
+        padding: 0.95rem;
     }
 
-    .join__actions {
-        gap: 0.75rem;
+    .joinflow__title {
+        font-size: 1.2rem;
+        line-height: 1.24;
     }
 
-    .join__actions .btn {
+    .joinflow__body {
+        font-size: 0.8rem;
+        line-height: 1.62;
+    }
+
+    .joinflow__list {
+        margin-top: 0.75rem;
+        gap: 0.35rem;
+    }
+
+    .joinflow__list li {
+        font-size: 0.76rem;
+        padding-left: 0.85rem;
+    }
+
+    .joinflow__actions {
+        gap: 0.7rem;
+        margin-top: 0.95rem;
+    }
+
+    .joinflow__actions .btn {
         width: 100%;
         justify-content: center;
+    }
+
+    .joinflow__meta {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.5rem;
+    }
+
+    .joinflow__meta-card {
+        min-height: 0;
+        padding: 0.7rem 0.6rem;
+    }
+
+    .joinflow__meta-card span {
+        font-size: 0.48rem;
+        letter-spacing: 0.18em;
+    }
+
+    .joinflow__meta-card strong {
+        font-size: 0.7rem;
+        letter-spacing: 0.13em;
+    }
+
+    .joinflow__steps {
+        margin-top: auto;
+        flex: 0 0 auto;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        gap: 0.45rem;
+        padding: 0.55rem 0 0;
+        border-left: 0;
+        border-top: 1px solid var(--line);
+        overflow-x: auto;
+        font-size: 0.56rem;
+        letter-spacing: 0.12em;
+    }
+
+    .joinflow__steps li {
+        flex: 1 0 auto;
+        min-width: max-content;
+        gap: 0.35rem;
+        white-space: nowrap;
+    }
+
+    .joinflow__progress-wrap {
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        justify-self: stretch;
+    }
+
+    .joinflow__progress {
+        flex: 1 1 auto;
+        width: auto;
+    }
+
+    .joinflow__pct {
+        flex: 0 0 auto;
+        font-size: 0.64rem;
+    }
+
+    .join__support {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        margin-top: 1rem;
     }
 
     .section--assembly {
